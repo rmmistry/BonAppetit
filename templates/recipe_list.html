@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if "user_id" in session %}
+<p> this is recipe list, printing all recipes on this page </p>
+
+
+
+{% for category in db_categories %}
+    <br>{{category.category_name}}</br>
+{% endfor %}
+
+{% for recipe in db_recipes %}
+    <br>{{recipe.title}}</br><br>{{recipe.created_at}}</br>
+{% endfor %}
+
+
+{% for ingredient in db_ingredients %}
+    <br>{{ingredient.ingredient_name}}</br>
+{% endfor %}
+
+
+{% endif %}
+{% endblock %}

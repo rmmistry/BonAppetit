@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if "user_id" in session %}
+hello you are in session
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<h1>Add New Recipe</h1>
+
+<form  id="recipeFormId" action="/recipeform-confirm" method="POST">
+    <h3> Title: </h3> 
+    <input type="text" name="title" style="width:600px"><br><br>
+
+    <h3> Categorize this recipe </h3>
+    <select name="category_name">
+        {% for category in db_categories %}
+            <option value="{{category.category_id}}">{{category.category_name}}</option>
+        {% endfor %}
+
+        
+       
+    </select>
+
+    <h3> Yields: </h3>
+    <input type="text" name="yields" placeholder="#">
+
+    <div id = "ingredient-container">
+
+        <div id="ingredient-field">
+            <h3> Ingredients: </h3>
+
+            Qty:
+            <input type="text" class="quantity" name="ingredients.quantity1" placeholder="Enter quantity" style="width: 90px;">
+
+            Measure:
+            <input type="text" class="measure" name="ingredients.measure1" placeholder="Enter unit" style="width: 200px">
+
+            Item:
+            <input type="text" class="item" name="ingredients.ingredients_name1" placeholder="Ingredient name" style="width: 300px"><br>
+        </div><br>
+
+        
+        <div class="new-ingredient-field">
+            Qty: 
+            <input type="text" class="quantity" name="ingredients.quantity2" placeholder="Enter quantity"style="width: 90px;">
+
+            Measure: <input type="text" class="measure" name="ingredients.measure2" placeholder="Enter unit" style="width: 200px">
+
+            Item: 
+            <input type="text" class="item" name="ingredients.ingredients_name2" placeholder="ingredient name" style="width: 300px">
+            
+        </div> <!-- div for .new-ingredient-field --><br>
+
+
+        <div class="new-ingredient-field">
+            Qty: 
+            <input type="text" class="quantity" name="ingredients.quantity3" placeholder="Enter quantity"style="width: 90px;">
+
+            Measure: <input type="text" class="measure" name="ingredients.measure3" placeholder="Enter unit" style="width: 200px">
+
+            Item: 
+            <input type="text" class="item" name="ingredients.ingredients_name3" placeholder="ingredient name" style="width: 300px">
+        
+        </div> <!-- div for .new-ingredient-field -->
+    
+    </div> <!-- div for #ingredient-section -->
+
+    <br><br>
+    <button type="button" id="add-new">+ Add another ingredient</button> 
+
+
+    <h3> Preparation: </h3>
+    <textarea rows="5" cols="50" name="preparation" placeholder="Provide steps to prepare the dish"></textarea><br>
+
+    <!--<button type="button" id="formSubmitId" >+ Save Recipe </button> -->
+    <input type="submit" value="+ Save Recipe"></input>
+
+</form>
+
+<!--<script type="text/javascript">-->
+<!-- //     $( "#formSubmitId" ).click(function() {
+//         $( "#recipeFormId" ).submit();
+//         console.log('submit button event is coming here');
+// }); -->
+
+// </script>
+{% endif %}
+{% endblock %}
