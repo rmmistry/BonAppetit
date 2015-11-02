@@ -4,7 +4,7 @@
 {% if "user_id" in session %}
 hello you are in session
 
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>-->
 <h1>Add New Recipe</h1>
 
 <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
@@ -12,13 +12,11 @@ hello you are in session
     <input type="text" name="title" style="width:600px"><br><br>
 
     <h3> Categorize this recipe </h3>
+
     <select name="category_name">
         {% for category in db_categories %}
             <option value="{{category.category_id}}">{{category.category_name}}</option>
         {% endfor %}
-
-        
-       
     </select>
 
     <h3> Yields: </h3>
@@ -73,7 +71,7 @@ hello you are in session
     <textarea rows="5" cols="50" name="preparation" placeholder="Provide steps to prepare the dish"></textarea><br>
 
     <!--<button type="button" id="formSubmitId" >+ Save Recipe </button> -->
-    <input type="submit" value="+ Save Recipe"></input>
+    <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
 
 </form>
 
@@ -83,6 +81,6 @@ hello you are in session
 //         console.log('submit button event is coming here');
 // }); -->
 
-// </script>
+<!--</script>-->
 {% endif %}
 {% endblock %}

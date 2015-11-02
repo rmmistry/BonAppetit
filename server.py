@@ -100,7 +100,7 @@ def logout():
 
 @app.route('/recipe-list', methods=['GET'])
 def show_my_recipe():
-    """Show interactive recide list page for a perticular user"""
+    """Show interactive recipe list page for a perticular user"""
 
     #query db to get users recipies 
     db_categories = Category.query.all()
@@ -116,6 +116,7 @@ def show_recipe_form():
     """show recipe form"""
     
     db_categories = Category.query.all()
+    print db_categories
 
 
     return render_template("recipe_form.html", db_categories=db_categories)
