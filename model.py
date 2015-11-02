@@ -163,7 +163,7 @@ class Ingredient(db.Model):
                               primary_key=True)
     ingredient_name = db.Column(db.String(255), nullable=False)
     quantity = db.Column(db.Integer, nullable=True)
-    measure = db.Column(db.Integer, nullable=True)
+    measure = db.Column(db.String(255), nullable=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.recipe_id"))
 
     @classmethod
