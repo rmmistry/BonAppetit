@@ -22,10 +22,11 @@ hello you are in session
     <h3> Yields: </h3>
     <input type="text" name="yields" placeholder="#">
 
+    <h3> Ingredients: </h3>
+
     <div id = "ingredient-container">
 
-        <div id="ingredient-field">
-            <h3> Ingredients: </h3>
+        <div class="ingredient-field">
 
             Qty:
             <input type="text" class="quantity" name="ingredients.quantity1" placeholder="Enter quantity" style="width: 90px;">
@@ -34,11 +35,15 @@ hello you are in session
             <input type="text" class="measure" name="ingredients.measure1" placeholder="Enter unit" style="width: 200px">
 
             Item:
-            <input type="text" class="item" name="ingredients.ingredients_name1" placeholder="Ingredient name" style="width: 300px"><br>
-        </div><br>
+            <input type="text" class="item" name="ingredients.ingredients_name1" placeholder="Ingredient name" style="width: 300px">
+
+        </div>
+    </div>
+
+
 
         
-        <div class="new-ingredient-field">
+        <!-- <div class="new-ingredient-field">
             Qty: 
             <input type="text" class="quantity" name="ingredients.quantity2" placeholder="Enter quantity"style="width: 90px;">
 
@@ -47,10 +52,10 @@ hello you are in session
             Item: 
             <input type="text" class="item" name="ingredients.ingredients_name2" placeholder="ingredient name" style="width: 300px">
             
-        </div> <!-- div for .new-ingredient-field --><br>
+        </div> -->
 
 
-        <div class="new-ingredient-field">
+        <!-- <div class="new-ingredient-field">
             Qty: 
             <input type="text" class="quantity" name="ingredients.quantity3" placeholder="Enter quantity"style="width: 90px;">
 
@@ -59,12 +64,11 @@ hello you are in session
             Item: 
             <input type="text" class="item" name="ingredients.ingredients_name3" placeholder="ingredient name" style="width: 300px">
         
-        </div> <!-- div for .new-ingredient-field -->
-    
-    </div> <!-- div for #ingredient-section -->
+        </div> -->
 
     <br><br>
     <button type="button" id="add-new">+ Add another ingredient</button> 
+
 
 
     <h3> Preparation: </h3>
@@ -74,6 +78,21 @@ hello you are in session
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
 
 </form>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script>
+    $("#add-new").on('click', function() {
+        var new_ingredient = $(".ingredient-field").get(0);
+        var new_field= $(new_ingredient).clone();
+        new_field.appendTo("#ingredient-container");
+        index = $("#ingredient-container").children().length
+
+        $('.quantity', new_field).attr('name', 'ingredients.quantity' + index);
+        $('.measure', new_field).attr('name', 'ingredients.measure' + index);
+        $('.item', new_field).attr('name', 'ingredient.ingredients_name' + index);
+    });
+
+</script>
 
 <!--<script type="text/javascript">-->
 <!-- //     $( "#formSubmitId" ).click(function() {
