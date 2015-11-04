@@ -85,10 +85,12 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow())
 
+    category=db.relationship("Category", backref=db.backref("recipes"))
+
     @classmethod
     def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields):
         """Add a new recipe to the database."""
-        print "THIS FUNCTION GET CALLED MY POST"
+        print "THIS FUNCTION GET CALLED BY POST"
 
         new_recipe = Recipe(title=title,
                             category_id=category_id,
@@ -106,7 +108,7 @@ class Recipe(db.Model):
         """Make printing the object useful"""
 
         repr_string = ("<Recipe recipe_id: {recipe_id}, title: {title}," +
-                       "category_id: {category_id}, total_time: {total_time}" +
+                       "category_id: {category_id},"+
                        "preparation: {preparation}, user_id: {user_id}," +
                        "yields: {yields}, created_at: {created_at}>")
 
@@ -167,7 +169,7 @@ class Ingredient(db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.recipe_id"))
 
     @classmethod
-    def create_ingredient(cls, quantity, measure, item, recipe_id):
+    def create_ingredient(cls, item, quantity, measure, recipe_id):
         """get ingredient and store in db"""
 
         new_ingredient = Ingredient(ingredient_name=item,

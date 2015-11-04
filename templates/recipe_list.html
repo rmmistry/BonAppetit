@@ -3,22 +3,59 @@
 {% block content %}
 
 {% if "user_id" in session %}
-<p> this is recipe list, printing all recipes on this page </p>
+<p> Shows Title, Category, Date Added </p>
+
+<div>
+    <a href='/delete recipe'>Delete</a>
+    <a href='/share'>Share</a>
+    <a href='/edit-recipe'>Edit</a>
+</div>
+
+<div>
+    Recipe:
+    {% set count = 0 %}
+    {% for recipe in db_recipes %}
+        {{recipe.title}}
+        {{recipe.created_at}}
+        {{recipe.category.category_name}}<br>
+        {% set count = count + 1 %}
+
+    {% endfor %}
 
 
 
-{% for category in db_categories %}
-    <br>{{category.category_name}}</br>
-{% endfor %}
 
-{% for recipe in db_recipes %}
-    <br>{{recipe.title}}</br><br>{{recipe.created_at}}</br>
-{% endfor %}
+    <!-- {% set count = 0 %}
+    {% for recipe in db_recipes %}
+    {% set count = count + 1 %}
+    {% endfor %} -->
 
 
-{% for ingredient in db_ingredients %}
-    <br>{{ingredient.ingredient_name}}</br>
-{% endfor %}
+
+</div> <br><br>
+
+<!-- <div>
+    Date Created:
+    {% for recipe in db_recipes %}
+    <br>{{recipe.created_at}}</br>
+    {% endfor %}
+</div><br><br>
+
+<div>
+    Category:
+    {% for recipe in db_recipes %}
+    <br>{{recipe.category.category_name}}</br>
+    {% endfor %}
+</div> -->
+
+
+<p> All Recipes: Total Number ___ </p>
+
+<!-- <div>
+    {% for ingredient in db_ingredients %}
+        <br>{{ingredient.ingredient_name}}</br>
+    {% endfor %}
+</div> -->
 
 
 {% endif %}

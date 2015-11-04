@@ -102,22 +102,21 @@ def logout():
 def show_my_recipe():
     """Show interactive recipe list page for a perticular user"""
 
-    #query db to get users recipies 
+    #query db to get users recipies
     db_categories = Category.query.all()
     db_recipes = Recipe.query.all()
     db_ingredients = Ingredient.query.all()
-    #jinja iterate over list of recipes
 
-    return render_template("recipe_list.html", db_categories=db_categories, db_recipes=db_recipes, db_ingredients=db_ingredients)
+    #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
+    return render_template("recipe_list.html", db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients)
 
 
 @app.route('/recipeform', methods=['GET'])
 def show_recipe_form():
     """show recipe form"""
-    
+
     db_categories = Category.query.all()
     print db_categories
-
 
     return render_template("recipe_form.html", db_categories=db_categories)
 
@@ -125,81 +124,46 @@ def show_recipe_form():
 @app.route('/recipeform-confirm', methods=['POST'])
 def process_recipe_form():
     """Process recipe form to add new recipe to the database."""
-    # Get category id out of request.form and add to Recipe as category_id.
-
+    
     #get recipe form variables
-    # print request.form
-    # print request.form["title"]
-    # print request.form["preparation"]
-    # print request.form["category_name"]
-    # print request.form["ingredients.ingredients_name"]
-    # print request.form["ingredients.measure"]
-    # print request.form["ingredients.quantity"]
-
-    # print session["user_id"]
+    print "request.form: ", request.form
 
     userid = session["user_id"]
-
     title = request.form["title"]
     preparation = request.form["preparation"]
     yields = request.form["yields"]
-    #userid = request.form["user_id"]
     category_id = request.form["category_name"]
-    #category_id = request.form["category_id"]
-    
-    # Get first ingredient
 
-    qty1 = request.form["ingredients.quantity1"]
-    measure1 = request.form["ingredients.measure1"]
-    item1 = request.form["ingredients.ingredients_name1"]
+    ingredient_names = request.form.getlist('name')
+    ingredient_quantities = request.form.getlist('quantity')
+    ingredient_measures = request.form.getlist('measure')
 
-    # Get second ingredeient
-    qty2 = request.form["ingredients.quantity2"]
-    measure2 = request.form["ingredients.measure2"]
-    item2 = request.form["ingredients.ingredients_name2"]
-
-
-    # Get third ingredient
-    qty3 = request.form["ingredients.quantity3"]
-    measure3 = request.form["ingredients.measure3"]
-    item3 = request.form["ingredients.ingredients_name3"]
-
-    # category_id = Category.get_category_id(category_name)
-    # print category
-    # print category
-    # print category
-    # print category
-
-
+    print "INGREDIENT NAME: ", ingredient_names
+   
     recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
 
-    # Make first ingredient
-    ing1 = Ingredient.create_ingredient(quantity=qty1, measure=measure1, item=item1, recipe_id=recipe_id)
-    # Make second ingredeitn
-    ing2 = Ingredient.create_ingredient(quantity=qty2, measure=measure2, item=item2, recipe_id=recipe_id)
-    # Make third ing.
-    ing3 = Ingredient.create_ingredient(quantity=qty3, measure=measure3, item=item3, recipe_id=recipe_id)
-
-    # Category.get_category_name(category_name)
-
-    # #to do
-    # #add ingredient to database dynamically
-    # #get ingredient from recipe form dynamically
+    for i in range(len(ingredient_names)):
+        item = ingredient_names[i]
+        quantity = ingredient_quantities[i]
+        measure = ingredient_measures[i]
+        Ingredient.create_ingredient(item=item, quantity=quantity, measure=measure, recipe_id=recipe_id)
 
     return redirect("/recipe-list")
 
 
-@app.route('/edit-recipe', methods=['GET'])
+@app.route("/recipes/<int:userid>/recipe/<int:recipeid>/edit", methods=['GET'])
 def show_prefilled_recipe_form():
     """Show existing prefilled recipe form"""
 
-    return render_template("/recipe_form.html")
+
+    return render_template("/edit_recipe_form.html", recipes=recipes)
 
 
 @app.route('/edit-recipe', methods=['POST'])
 def process_edit_on_recipe_form(recipe_id):
     """Allows user to edit existing recipe and Save"""
 
+    recipes = Recipe.query.filter_by()
     #use jinja,  Recipe List {%for recipe in recipes%}
     #<a href ="/editrecipe(route)/{{recipe_id}}"
     # EDIT (button) </a>
