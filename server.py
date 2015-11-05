@@ -150,25 +150,28 @@ def process_recipe_form():
 
     return redirect("/recipe-list")
 
+#########################################################################
 
-@app.route("/recipes/<int:userid>/recipe/<int:recipeid>/edit", methods=['GET'])
-def show_prefilled_recipe_form():
+@app.route("/recipes/<int:recipeid>/edit", methods=['GET'])
+def show_prefilled_recipe_form(recipeid):
     """Show existing prefilled recipe form"""
 
+    # recipe object
+    recipe = Recipe.get_existing_recipe(recipeid)
+    db_categories = Category.query.all()
+    ingredients = Ingredient.get_existing_ingredients(recipeid)
 
-    return render_template("/edit_recipe_form.html", recipes=recipes)
+    print "RECIPE OBJECT:", recipe
+
+    return render_template("/edit_recipe_form.html", recipe=recipe, db_categories=db_categories, ingredients=ingredients)
 
 
-@app.route('/edit-recipe', methods=['POST'])
-def process_edit_on_recipe_form(recipe_id):
+@app.route("/edit-recipe/<int:recipeid>/confirm", methods=['POST'])
+def process_confirm_recipe_edit(recipe_id):
     """Allows user to edit existing recipe and Save"""
 
-    recipes = Recipe.query.filter_by()
+    recipes = Recipe.query.filter_by(recipeid=recipe_id).one()
     #use jinja,  Recipe List {%for recipe in recipes%}
-    #<a href ="/editrecipe(route)/{{recipe_id}}"
-    # EDIT (button) </a>
-    # @app.route("/editrecipe/<int: recipe_id>")
-    # def process_edit(recipe_id)
     # get recipe out of DB
     # return form with prefilled values
 

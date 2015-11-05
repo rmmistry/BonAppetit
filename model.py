@@ -80,12 +80,10 @@ class Recipe(db.Model):
                         nullable=False)
     preparation = db.Column(db.Text, nullable=False)
     yields = db.Column(db.Integer, nullable=False)
-    #created_at = db.Column(db.DateTime, nullable=False,
-     #                      default="CURRENT_TIMESTAMP")
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow())
 
-    category=db.relationship("Category", backref=db.backref("recipes"))
+    category = db.relationship("Category", backref=db.backref("recipes"))
 
     @classmethod
     def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields):
@@ -104,11 +102,19 @@ class Recipe(db.Model):
         recipe = Recipe.query.filter_by(title=title, user_id=user_id).first()
         return recipe.recipe_id
 
+    @classmethod
+    def get_existing_recipe(cls, recipeid):
+        """get existing recipe for a given recipeid"""
+
+        recipe = Recipe.query.get(recipeid)
+
+        return recipe
+
     def __repr__(self):
         """Make printing the object useful"""
 
         repr_string = ("<Recipe recipe_id: {recipe_id}, title: {title}," +
-                       "category_id: {category_id},"+
+                       "category_id: {category_id}," +
                        "preparation: {preparation}, user_id: {user_id}," +
                        "yields: {yields}, created_at: {created_at}>")
 
@@ -147,6 +153,12 @@ class Category(db.Model):
 
         return category.category_id
 
+    @classmethod
+    def get_db_categories():
+        """get all the categories from db"""
+        
+        pass
+
     def __repr__(self):
         """Make printing the object useful"""
 
@@ -181,6 +193,13 @@ class Ingredient(db.Model):
         db.session.commit()
 
         return new_ingredient
+
+    @classmethod
+    def get_existing_ingredients(cls, recipeid):
+        """get a list of ingredients in a given recipeid """
+
+        existing_ingredients = Ingredient.query.filter_by(recipe_id=recipeid).all()
+        return existing_ingredients
 
 
 

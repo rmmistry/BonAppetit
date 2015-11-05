@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if "user_id" in session %}
+hello you are in session
+
+<h1>Add New Recipe</h1>
+
+<form  action="/edit-recipe/{{recipe.recipe_id}}/confirm" method="POST" id="edit-recipe-form">
+    <h3> Title: </h3> 
+        <input type="text" name="title" value="{{recipe.title}}"style="width:600px"><br><br>
+
+    <h3> Categorize this recipe </h3>
+
+        <select name="category_name">
+            {% for category in db_categories %}
+                <option value="{{category.category_id}}">{{category.category_name}}</option>
+            {% endfor %}
+        </select>
+
+    <h3> Yields: </h3>
+
+        <input type="text" name="yields" value="{{ recipe.yields }}" placeholder="#">
+
+    <h3> Ingredients: </h3>
+
+        <div id = "ingredient-container">
+
+            {% for ingredient in ingredients %}
+                {% if ingredient.ingredient_name != '' %}
+                <div class="ingredient-field">
+
+                    Qty:<input type="text" name="quantity" value="{{ ingredient.quantity }}" placeholder="Enter quantity" style="width: 90px;">
+                    Measure:<input type="text" name="measure" value="{{ ingredient.measure }}"placeholder="Enter unit" style="width: 200px">
+                    Item:<input type="text" name="name" value="{{ ingredient.ingredient_name }}"placeholder="Ingredient name" style="width: 300px">
+                </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    <input type="hidden" id="countId" name="count"> 
+
+    <br><br>
+    <button type="button" id="add-new">+ Add another ingredient</button> 
+
+    <h3> Preparation: </h3>
+    
+        <textarea rows="5" cols="50" name="preparation" value="{{ recipe.preparation }}"placeholder="Provide steps to prepare the dish"></textarea><br>
+
+    <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
+
+</form>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script>
+    
+    $("#add-new").on('click', function() {
+        var new_ingredient = $(".ingredient-field").get(0);
+        var new_field= $(new_ingredient).clone();
+        new_field.appendTo("#ingredient-container");
+        index = $("#ingredient-container").children().length;
+        //counter ++;
+
+        $('.quantity', new_field).attr('name', 'quantity');
+        $('.measure', new_field).attr('name', 'measure');
+        $('.item', new_field).attr('name', 'name');
+    });
+
+</script>
+
+{% endif %}
+{% endblock %}
