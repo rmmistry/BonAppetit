@@ -4,7 +4,7 @@
 {% if "user_id" in session %}
 hello you are in session
 
-<h1>Add New Recipe</h1>
+<h1>Update your Recipe</h1>
 
 <form  action="/edit-recipe/{{recipe.recipe_id}}/confirm" method="POST" id="edit-recipe-form">
     <h3> Title: </h3> 
@@ -14,7 +14,13 @@ hello you are in session
 
         <select name="category_name">
             {% for category in db_categories %}
+                {% if category.category_id == recipe.category_id %}
+                <option selected value="{{category.category_id}}">{{category.category_name}}</option>
+                {% else %}
                 <option value="{{category.category_id}}">{{category.category_name}}</option>
+
+                {% endif %}
+
             {% endfor %}
         </select>
 
@@ -46,7 +52,7 @@ hello you are in session
 
     <h3> Preparation: </h3>
     
-        <textarea rows="5" cols="50" name="preparation" value="{{ recipe.preparation }}"placeholder="Provide steps to prepare the dish"></textarea><br>
+        <textarea rows="5" cols="50" name="preparation" placeholder="Enter recipe steps" value="{{ recipe.preparation }}">{{ recipe.preparation }}</textarea><br>
 
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
 

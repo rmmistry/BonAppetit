@@ -80,10 +80,12 @@ class Recipe(db.Model):
                         nullable=False)
     preparation = db.Column(db.Text, nullable=False)
     yields = db.Column(db.Integer, nullable=False)
+    #created_at = db.Column(db.DateTime, nullable=False,
+     #                      default="CURRENT_TIMESTAMP")
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow())
 
-    category = db.relationship("Category", backref=db.backref("recipes"))
+    category=db.relationship("Category", backref=db.backref("recipes"))
 
     @classmethod
     def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields):
@@ -114,7 +116,7 @@ class Recipe(db.Model):
         """Make printing the object useful"""
 
         repr_string = ("<Recipe recipe_id: {recipe_id}, title: {title}," +
-                       "category_id: {category_id}," +
+                       "category_id: {category_id},"+
                        "preparation: {preparation}, user_id: {user_id}," +
                        "yields: {yields}, created_at: {created_at}>")
 

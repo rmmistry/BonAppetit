@@ -140,7 +140,10 @@ def process_recipe_form():
 
     print "INGREDIENT NAME: ", ingredient_names
    
-    recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
+    #recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
+    Recipe.create_recipe(title, category_id, userid, preparation, yields)
+
+    recipe_id = Recipe.get_recipe_id(title, userid)
 
     for i in range(len(ingredient_names)):
         item = ingredient_names[i]
@@ -162,20 +165,40 @@ def show_prefilled_recipe_form(recipeid):
     ingredients = Ingredient.get_existing_ingredients(recipeid)
 
     print "RECIPE OBJECT:", recipe
+    print recipe.preparation
 
     return render_template("/edit_recipe_form.html", recipe=recipe, db_categories=db_categories, ingredients=ingredients)
 
 
 @app.route("/edit-recipe/<int:recipeid>/confirm", methods=['POST'])
-def process_confirm_recipe_edit(recipe_id):
+def process_confirm_recipe_edit(recipeid):
     """Allows user to edit existing recipe and Save"""
 
-    recipes = Recipe.query.filter_by(recipeid=recipe_id).one()
-    #use jinja,  Recipe List {%for recipe in recipes%}
-    # get recipe out of DB
-    # return form with prefilled values
+    #get recipe object using recipeid
+    recipe = Recipe.get_existing_recipe(recipeid)
+    #ger recipe object = request.form(name)
+    recipe.recipe_id = recipeid
+    recipe.title = request.form["title"]
+    recipe.preparation = request.form["preparation"]
+    recipe.yields = request.form["yields"]
+    recipe.category_id = request.form["category_name"]
+
+    recipe.ingredients = []
+
+    ingredient_names = request.form.getlist('name')
+    ingredient_quantities = request.form.getlist('quantity')
+    ingredient_measures = request.form.getlist('measure')
+
+
+    for i in range(len(ingredient_names)):
+        item = ingredient_names[i]
+        quantity = ingredient_quantities[i]
+        measure = ingredient_measures[i]
+        Ingredient.create_ingredient(item=item, quantity=quantity, measure=measure, recipe_id=recipeid)
+
 
     return redirect("/recipe-list")
+
 
 
 @app.route('/view-recipe', methods=['GET'])

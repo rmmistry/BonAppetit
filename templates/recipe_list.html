@@ -5,11 +5,6 @@
 {% if "user_id" in session %}
 <p> Shows Title, Category, Date Added </p>
 
-<div>
-    <a href='/delete recipe'>Delete</a>
-    <a href='/share'>Share</a>
-    <a href='/recipes/<int:recipeid>/edit'>Edit</a>
-</div>
 
 <div>
     Recipe:
@@ -17,7 +12,10 @@
     {% for recipe in db_recipes %}
         {{recipe.title}}
         {{recipe.created_at}}
-        {{recipe.category.category_name}}<br>
+        {{recipe.category.category_name}}
+        <a href='/delete recipe'>Delete</a>
+        <a href='/share'>Share</a>
+        <a href='/recipes/{{recipe.recipe_id}}/edit'>Edit</a><br>
         {% set count = count + 1 %}
 
     {% endfor %}
