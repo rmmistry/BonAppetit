@@ -14,9 +14,10 @@
         {{recipe.created_at}}
         {{recipe.category.category_name}}
         <a href='/recipes/{{recipe.recipe_id}}'>Delete</a>
-        <a href='/share/{{recipe.recipe_id}}/sharerecipe'>Share</a>
+        <a href="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}">Share</a>
         <a href='/recipes/{{recipe.recipe_id}}/edit'>Edit</a><br>
         {% set count = count + 1 %}
+
 
     {% endfor %}
 

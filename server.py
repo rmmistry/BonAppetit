@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Recipe, Category, Ingredient
@@ -199,13 +199,28 @@ def process_confirm_recipe_edit(recipeid):
 
     return redirect("/recipe-list")
 
+###################################################################################
+
+@app.route("/recipes/<int:recipeid>", methods=['GET'])
+def delete_recipe(recipeid):
+    """deletes recipe for a given recipeid from database"""
+
+    #Delete recipe when user clicks on a recipe
+    Recipe.delete_existing_recipe(recipeid)
+
+    flash("Your recipe has been deleted successfully")  
+    return redirect("/recipe-list")
 
 
-@app.route('/view-recipe', methods=['GET'])
-def show_view_recipe_page():
+@app.route('/view-recipe/<int:recipeid>', methods=['GET'])
+def show_view_recipe_page(recipeid):
     """Show view recipe page"""
 
-    return render_template("view_recipe.html")
+    return str(recipeid)
+
+    #url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}
+    #when user clicks on a share link - model window should pop up and that model window should get this above link.
+
 
 
 if __name__ == "__main__":
