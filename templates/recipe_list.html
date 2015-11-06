@@ -13,8 +13,8 @@
         {{recipe.title}}
         {{recipe.created_at}}
         {{recipe.category.category_name}}
-        <a href='/delete recipe'>Delete</a>
-        <a href='/share'>Share</a>
+        <a href='/recipes/{{recipe.recipe_id}}'>Delete</a>
+        <a href='/share/{{recipe.recipe_id}}/sharerecipe'>Share</a>
         <a href='/recipes/{{recipe.recipe_id}}/edit'>Edit</a><br>
         {% set count = count + 1 %}
 

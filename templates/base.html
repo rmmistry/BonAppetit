@@ -7,8 +7,9 @@
 
 {% if "user_id" in session %}
     <a href="/logout">Logout</a>
-    <a href="/recipe_form">Add Recipe</a>
-    <a href="/recipe-list/{{session['user_id']}}">Myrecipe</a>
+    <a href="/recipeform">Add Recipe</a>
+    <a href="/recipe-list">Myrecipe</a>
+    
 {% else %}
     <a href="/signin">Sign In</a>
     <a href="/signup">Sign Up</a>
@@ -23,6 +24,7 @@
 {% block content %}
     Put your body here.
 {% endblock %}
+
 
 </body>
 </html>

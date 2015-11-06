@@ -85,7 +85,7 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow())
 
-    category=db.relationship("Category", backref=db.backref("recipes"))
+    category = db.relationship("Category", backref=db.backref("recipes"))
 
     @classmethod
     def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields):
@@ -111,6 +111,16 @@ class Recipe(db.Model):
         recipe = Recipe.query.get(recipeid)
 
         return recipe
+
+    @classmethod
+    def delete_existing_recipe(cls, recipeid):
+        """allows user to delete existing recipe"""
+
+        delete_recipe = Recipe.query.filter_by(recipe_id=recipeid).delete()
+
+        db.session.commit()
+
+        return delete_recipe
 
     def __repr__(self):
         """Make printing the object useful"""
