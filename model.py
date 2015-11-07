@@ -219,7 +219,7 @@ class Ingredient(db.Model):
         """Make printing the object useful"""
 
         repr_string = ("<Ingredient ingredient_id: {ingredient_id}," +
-                       "ingredient_name: {ingredients_name}" +
+                       "ingredient_name: {ingredient_name}" +
                        "quantity: {quantity}, measure: {measure}" +
                        "recipe_id: {recipe_id}>")
 

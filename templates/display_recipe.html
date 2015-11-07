@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<title>
+    Displays a recipe page
+</title>
+
+<form action="/view-recipe/{{recipe_id}}">
+    <body>
+
+        <h1>
+            Your delicious recipe
+        </h1>
+
+        <div>
+            <p>Title:
+            {{recipe.title}}</p>
+        </div>
+
+        <div>
+            <p>Category:
+            {{recipe.category.category_name}}</p>
+        </div>
+
+        <div>
+            <p>Yields:
+            {{recipe.yields}}</p>
+        </div>
+
+        <div>
+            <p>Ingredients:</p>
+            {% for ingredient in ingredients %}
+                
+                <p>{{ ingredient.quantity}} {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p>
+            
+            {% endfor %}
+        </div>
+
+        <div>
+            <p>Preparation:</p>
+            {{recipe.preparation}}
+
+
+        </div>
+
+    </body>
+</form>
+
+
+
+
+</htnl>

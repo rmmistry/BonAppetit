@@ -216,7 +216,13 @@ def delete_recipe(recipeid):
 def show_view_recipe_page(recipeid):
     """Show view recipe page"""
 
-    return str(recipeid)
+    recipe = Recipe.get_existing_recipe(recipeid)
+    ingredients = Ingredient.get_existing_ingredients(recipeid)
+
+
+
+    #return str(recipeid)
+    return render_template("/display_recipe.html", recipe_id=recipeid, recipe=recipe, ingredients=ingredients)
 
     #url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}
     #when user clicks on a share link - model window should pop up and that model window should get this above link.
