@@ -80,15 +80,13 @@ class Recipe(db.Model):
                         nullable=False)
     preparation = db.Column(db.Text, nullable=False)
     yields = db.Column(db.Integer, nullable=False)
-    #created_at = db.Column(db.DateTime, nullable=False,
-     #                      default="CURRENT_TIMESTAMP")
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.datetime.utcnow())
-
+    image = db.Column(db.String(255), nullable=True)
     category = db.relationship("Category", backref=db.backref("recipes"))
 
     @classmethod
-    def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields):
+    def create_recipe(cls, title=title, category_id=category_id, user_id=user_id, preparation=preparation, yields=yields, image=image):
         """Add a new recipe to the database."""
         print "THIS FUNCTION GET CALLED BY POST"
 
@@ -96,7 +94,8 @@ class Recipe(db.Model):
                             category_id=category_id,
                             user_id=user_id,
                             preparation=preparation,
-                            yields=yields)
+                            yields=yields,
+                            image=image)
 
         db.session.add(new_recipe)
         db.session.commit()

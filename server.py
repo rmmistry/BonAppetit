@@ -133,6 +133,7 @@ def process_recipe_form():
     preparation = request.form["preparation"]
     yields = request.form["yields"]
     category_id = request.form["category_name"]
+    image = request.form["image"]
 
     ingredient_names = request.form.getlist('name')
     ingredient_quantities = request.form.getlist('quantity')
@@ -141,7 +142,7 @@ def process_recipe_form():
     print "INGREDIENT NAME: ", ingredient_names
    
     #recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
-    Recipe.create_recipe(title, category_id, userid, preparation, yields)
+    Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
 
     recipe_id = Recipe.get_recipe_id(title, userid)
 
