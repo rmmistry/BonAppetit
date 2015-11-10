@@ -99,7 +99,12 @@ class Recipe(db.Model):
 
         db.session.add(new_recipe)
         db.session.commit()
+        return new_recipe
 
+    @classmethod
+    def get_recipe_id(cls, title, user_id):
+        """finds recipeid for a given title and userid"""
+        
         recipe = Recipe.query.filter_by(title=title, user_id=user_id).first()
         return recipe.recipe_id
 
@@ -125,7 +130,7 @@ class Recipe(db.Model):
         """Make printing the object useful"""
 
         repr_string = ("<Recipe recipe_id: {recipe_id}, title: {title}," +
-                       "category_id: {category_id},"+
+                       "category_id: {category_id}," +
                        "preparation: {preparation}, user_id: {user_id}," +
                        "yields: {yields}, created_at: {created_at}>")
 

@@ -4,7 +4,7 @@
 {% if "user_id" in session %}
 hello you are in session
 
-<h1>Add New Recipe</h1>
+<h1>Edit recipe</h1>
 
 <form  action="/edit-recipe/{{recipe.recipe_id}}/confirm" method="POST" id="edit-recipe-form">
     <h3> Title: </h3> 
@@ -46,7 +46,13 @@ hello you are in session
 
     <h3> Preparation: </h3>
     
-        <textarea rows="5" cols="50" name="preparation" value="{{recipe.preparation}}" placeholder="Provide steps to prepare the dish"></textarea><br>
+        <textarea rows="5" cols="50" name="preparation">{{recipe.preparation}}</textarea><br>
+
+    <h3> Image: </h3>
+        <input type="text" name="image" value="{{recipe.image}}"placeholder="enter image URL"> <br><br>
+        <img src="{{recipe.image}}">
+
+
 
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
     <input type="hidden" name="recipeid" value="{{recipe.recipe_id}}"/> 

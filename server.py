@@ -131,6 +131,7 @@ def process_recipe_form():
     userid = session["user_id"]
     title = request.form["title"]
     preparation = request.form["preparation"]
+    print preparation
     yields = request.form["yields"]
     category_id = request.form["category_name"]
     image = request.form["image"]
@@ -167,6 +168,7 @@ def show_prefilled_recipe_form(recipeid):
 
     print "RECIPE OBJECT:", recipe
     print recipe.preparation
+    print recipe.image
 
     return render_template("/edit_recipe_form.html", recipe=recipe, db_categories=db_categories, ingredients=ingredients)
 
@@ -183,6 +185,7 @@ def process_confirm_recipe_edit(recipeid):
     recipe.preparation = request.form["preparation"]
     recipe.yields = request.form["yields"]
     recipe.category_id = request.form["category_name"]
+    recipe.image = request.form["image"]
 
     recipe.ingredients = []
 
