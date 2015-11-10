@@ -8,30 +8,59 @@
 
 <div>
     Recipe:
-    {% set count = 0 %}
     {% for recipe in db_recipes %}
+    <div>
         {{recipe.title}}
         {{recipe.created_at}}
         {{recipe.category.category_name}}
-        <a href='/recipes/{{recipe.recipe_id}}'>Delete</a>
-        <a href="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}">Share</a>
-        <a href='/recipes/{{recipe.recipe_id}}/edit'>Edit</a><br>
-        {% set count = count + 1 %}
+        <a href='/recipes/{{recipe.recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 
+        <!-- div id="share" data-toggle="modal" data-target="#myModal">
+            <a href="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}">Share</a>
+        </div> -->
 
+        <a href="#" data-toggle="modal" data-target="#myModal{{recipe.recipe_id}}">
+            <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+        </a>
+
+        <a href='/recipes/{{recipe.recipe_id}}/edit'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+
+        <!--modal-->
+        <div class="modal fade" id="myModal{{recipe.recipe_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Share via copy and paste</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="text-muted" value="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}" readonly="readonly">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--endmodal-->
+    </div>
     {% endfor %}
-
-
-
-
-    <!-- {% set count = 0 %}
-    {% for recipe in db_recipes %}
-    {% set count = count + 1 %}
-    {% endfor %} -->
-
-
-
 </div> <br><br>
+
+<div>
+    <p> All Recipes: Total Number {{ db_recipes | length }} </p>
+    <!--{% set count = 0 %}
+        {% for recipe in db_recipes %}
+        {% set count = count + 1 %}
+        {% endfor %} -->
+</div>
+
+
+
+
+
+
 
 <!-- <div>
     Date Created:
@@ -47,8 +76,6 @@
     {% endfor %}
 </div> -->
 
-
-<p> All Recipes: Total Number ___ </p>
 
 <!-- <div>
     {% for ingredient in db_ingredients %}
