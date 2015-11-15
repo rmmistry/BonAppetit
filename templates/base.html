@@ -23,6 +23,13 @@
     <a href="/logout">Logout</a>
     <a href="/recipeform">Add Recipe</a>
     <a href="/recipe-list">Myrecipe</a>
+
+    <div>
+        <form action="/api" method='POST'>
+            <input type="text" value="" name="searchbox" id="searchbox" placeholder="search"></input>
+            <button type="submit" id="search">submit</button>
+        </form>
+    </div>
     
 {% else %}
     <a href="/signin">Sign In</a>

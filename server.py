@@ -2,12 +2,16 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session, url_for
+from flask import Flask, render_template, request, flash, redirect, session, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Recipe, Category, Ingredient
 
 import datetime
+
+import requests
+import json
+import os
 
 app = Flask(__name__)
 
@@ -17,6 +21,9 @@ app.secret_key = "secret key"
 # Normally, if you use an undefined variable in jinja2, it fails silently.
 # This is horrible. Fix this so that, instead, it raises an error.
 app.jinja_env.undefined = StrictUndefined
+#setting API key
+APP_ID=os.environ.get("APP_ID")
+APP_SECRET_KEY=os.environ.get("APP_KEY")
 
 
 @app.route('/')
@@ -231,7 +238,101 @@ def show_view_recipe_page(recipeid):
     #url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}
     #when user clicks on a share link - model window should pop up and that model window should get this above link.
 
+@app.route('/api', methods=['POST'])
+def recipe_api():
 
+    print "got here"
+    query = request.form["searchbox"]
+    print "query: ", query
+ 
+    #r = requests.get("https://api.edamam.com/search?q=" + query + "&app_id=" + APP_ID + "&app_key=" + APP_SECRET_KEY)
+    # print "http://api.yummly.com/v1/api/recipes?_app_id="+ APP_ID +"&_app_key="+ APP_SECRET_KEY +"&"+ query
+
+    r = requests.get("http://api.yummly.com/v1/api/recipes?_app_id="+ APP_ID +"&_app_key="+ APP_SECRET_KEY + "&q=" + query)
+    results = r.json() #is this json and if it is then it turns type to dictionary
+
+    # key =results.keys() # list
+    # print key
+
+    values = results['matches']# dictionary
+    # print "values: ", values# list
+
+    # recipe_search_id=[]
+    # recipe_search_title=[]
+
+    recipe_display={}
+
+    for i in range(len(values)):
+        recipe_id = values[i]['id']
+        splitted_list = recipe_id.split("-")
+        print splitted_list
+        title = splitted_list[0:-1]
+        print title
+        full_title = " ".join(title)
+        print full_title
+        recipe_display[full_title]=recipe_id
+        # recipe_search_title.append(full_title)
+        # recipe_search_id.append(recipe_id)
+        print "recipe id: ", recipe_id
+
+    # all_recipe_info = results[u'hits']
+    # #type(all_recipe_info)
+    # #list
+
+    # required_info = {}
+
+    # for i in all_recipe_info:
+    #     recipe_sorted = all_recipe_info[i]
+    #     #type(recipe)
+    #     #dict
+
+    #     recipe = recipe_sorted[u'recipe'] #z
+    #     #type(recipe)
+    #     #dict
+
+    #     ingredients = recipe[u'ingredientLines']
+    #     # for ingredient in ingredients:
+    #     #     print ingredient
+
+    #     title = recipe[u'label']
+
+    #     yields = recipe[u'yield']
+
+    #     required_info[title]={'yields':yields, 'ingredients':ingredients}
+
+
+
+    #print type(jsonify(results)), "THIS IS THE TYPE"
+
+    #recipe_info = jsonify(results)
+
+    #print recipe_info["hits"][0]
+
+    #print recipe_info
+
+    return render_template("recipe_search_results.html", recipe_display=recipe_display)
+
+
+@app.route('/display/<string:recipe_id>')
+def get_recipe_by_id(recipe_id):
+    """ gets recipe info for a given id"""
+
+    r = requests.get("http://api.yummly.com/v1/api/recipe/" + recipe_id + "?_app_key=" + APP_SECRET_KEY + "&_app_id=" + APP_ID)
+    results = r.json()
+
+    print results
+
+    return render_template("searched_recipe_display.html", results=results)
+
+
+
+
+
+
+
+
+
+#return redirect("/recipe-list")
 
 if __name__ == "__main__":
     # Set debug=True, since it has to be True at the point that we invoke the
