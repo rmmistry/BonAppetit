@@ -283,12 +283,12 @@ def recipe_api():
 
     # for i in all_recipe_info:
     #     recipe_sorted = all_recipe_info[i]
-    #     #type(recipe)
+    #     #type(recipe_sorted)
     #     #dict
 
     #     recipe = recipe_sorted[u'recipe'] #z
     #     #type(recipe)
-    #     #dict
+    #     #dict 
 
     #     ingredients = recipe[u'ingredientLines']
     #     # for ingredient in ingredients:
@@ -320,19 +320,38 @@ def get_recipe_by_id(recipe_id):
     r = requests.get("http://api.yummly.com/v1/api/recipe/" + recipe_id + "?_app_key=" + APP_SECRET_KEY + "&_app_id=" + APP_ID)
     results = r.json()
 
-    print results
+    required_info = {}
+    print required_info
 
-    return render_template("searched_recipe_display.html", results=results)
+    for i in results:
+        sorted_info = results[i]
+        title1 = sorted_info[u'name']
+        ingredients = sorted_info[u'ingredientLines']
+        course = sorted_info[u'attributes'][u'course']
+        yields = sorted_info[u'yield']
+        servings = sorted_info[u'numberOfServings']
+        prep_time = sorted_info[u'prepTime']
+        cook_time = sorted_info[u'cookTime']
+        rating = sorted_info[u'rating']
+        total_time = sorted_info[u'totalTime']
+        url = sorted_info[u'images'][0][u'hostedMediumUrl']
+        nutrition_description = sorted_info[u'nutritionEstimates'][1][u'description']
+        nutrition_value = sorted_info[u'nutritionEstimates'][1][u'value']
+    #print results
+        required_info[title1] = {'title1': title1,
+                                 'ingredients': ingredients,
+                                 'course': course,
+                                 'yields': yields,
+                                 'servings': servings,
+                                 'prep_time': prep_time,
+                                 'cook_time': cook_time,
+                                 'rating': rating,
+                                 'total_time': total_time,
+                                 'url': url,
+                                 'nutrition_description': nutrition_description,
+                                 'nutrition_value': nutrition_value}
 
-
-
-
-
-
-
-
-
-#return redirect("/recipe-list")
+    return render_template("searched_recipe_display.html", required_info=required_info)
 
 if __name__ == "__main__":
     # Set debug=True, since it has to be True at the point that we invoke the

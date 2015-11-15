@@ -3,7 +3,10 @@
 
 
 
-{{results}}
+{% for key, value in required_info.iteritems() %}
+            {{ key }} {{required_info[key]}}
+            
+{% endfor %}
 
 
 
