@@ -275,46 +275,12 @@ def recipe_api():
         # recipe_search_id.append(recipe_id)
         print "recipe id: ", recipe_id
 
-    # all_recipe_info = results[u'hits']
-    # #type(all_recipe_info)
-    # #list
-
-    # required_info = {}
-
-    # for i in all_recipe_info:
-    #     recipe_sorted = all_recipe_info[i]
-    #     #type(recipe_sorted)
-    #     #dict
-
-    #     recipe = recipe_sorted[u'recipe'] #z
-    #     #type(recipe)
-    #     #dict 
-
-    #     ingredients = recipe[u'ingredientLines']
-    #     # for ingredient in ingredients:
-    #     #     print ingredient
-
-    #     title = recipe[u'label']
-
-    #     yields = recipe[u'yield']
-
-    #     required_info[title]={'yields':yields, 'ingredients':ingredients}
-
-
-
-    #print type(jsonify(results)), "THIS IS THE TYPE"
-
-    #recipe_info = jsonify(results)
-
-    #print recipe_info["hits"][0]
-
-    #print recipe_info
 
     return render_template("recipe_search_results.html", recipe_display=recipe_display)
 
 
 @app.route('/display/<string:recipe_id>')
-def get_recipe_by_id(recipe_id):
+def get_recipe_info_by_id(recipe_id):
     """ gets recipe info for a given id"""
 
     r = requests.get("http://api.yummly.com/v1/api/recipe/" + recipe_id + "?_app_key=" + APP_SECRET_KEY + "&_app_id=" + APP_ID)
@@ -324,32 +290,28 @@ def get_recipe_by_id(recipe_id):
     print required_info
 
     for i in results:
-        sorted_info = results[i]
-        title1 = sorted_info[u'name']
-        ingredients = sorted_info[u'ingredientLines']
-        course = sorted_info[u'attributes'][u'course']
-        yields = sorted_info[u'yield']
-        servings = sorted_info[u'numberOfServings']
-        prep_time = sorted_info[u'prepTime']
-        cook_time = sorted_info[u'cookTime']
-        rating = sorted_info[u'rating']
-        total_time = sorted_info[u'totalTime']
-        url = sorted_info[u'images'][0][u'hostedMediumUrl']
-        nutrition_description = sorted_info[u'nutritionEstimates'][1][u'description']
-        nutrition_value = sorted_info[u'nutritionEstimates'][1][u'value']
-    #print results
-        required_info[title1] = {'title1': title1,
-                                 'ingredients': ingredients,
-                                 'course': course,
+        title1 = results['name']
+        ingredients = results['ingredientLines']
+        yields = results['yield']
+        # prep_time = results['prepTime']
+        prep_time = results.get('prepTime', 'not defined')
+        cook_time = results.get('cookTime', 'not defined')
+        rating = results.get('rating', 'not defined')
+        total_time = results['totalTime']
+        url = results['images'][0]['hostedMediumUrl']
+        source_url = results['source']['sourceRecipeUrl']
+        
+        required_info[title1] = {'ingredients': ingredients,
                                  'yields': yields,
-                                 'servings': servings,
                                  'prep_time': prep_time,
                                  'cook_time': cook_time,
                                  'rating': rating,
                                  'total_time': total_time,
                                  'url': url,
-                                 'nutrition_description': nutrition_description,
-                                 'nutrition_value': nutrition_value}
+                                 'source_url': source_url,
+                                 'recipe_id': recipe_id
+                                 }
+    print "required_info : ", required_info
 
     return render_template("searched_recipe_display.html", required_info=required_info)
 

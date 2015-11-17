@@ -4,7 +4,27 @@
 
 
 {% for key, value in required_info.iteritems() %}
-            {{ key }} {{required_info[key]}}
+           <p> Title: {{ key }} </p>
+           <p><img src='{{value.url}}'></p>
+            <p>ingredients: </p>
+                {% for ingredient in value.ingredients%}
+                <li>{{ingredient}}</li>
+                {% endfor %}
+            <p>Yields: {{value.yields}}</p>
+            
+            <p>Prep Time: {{value.prep_time}}</p>
+            <p>Cook Time: {{value.cook_time}}</p>
+        
+            <p>Total Time: {{value.total_time}}</p>
+
+
+
+<div>
+    <a href="{{value.source_url}}"><button type="button">View Preparation</button></a>
+</div>
+    
+<input type="submit" value="+ Save Recipe"></input>
+<input type="hidden" name="recipeid" value="{{value.recipe_id}}"/> 
             
 {% endfor %}
 
