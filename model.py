@@ -22,6 +22,8 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
 
+    yummly_recipes = db.relationship("Yummlyrecipe", secondary="yummlyusers", backref="users")
+
     @classmethod
     def get_user_via_email(cls, user_email):
         """check if an account with a given email address is already exists."""
@@ -232,6 +234,72 @@ class Ingredient(db.Model):
                                   quantity=self.quantity,
                                   measure=self.measure,
                                   recipe_id=self.recipe_id)
+
+
+class Yummlyrecipe(db.Model):
+
+    __tablename__ = "yummlyrecipes"
+
+    yummly_recipe_id = db.Column(db.String(300), primary_key=True, unique=True, nullable=False)
+    searched_title = db.Column(db.String(255), nullable=False)
+    prep_url = db.Column(db.String(255), nullable=False)
+    image_url = db.Column(db.String(300), nullable=False)
+
+    def __repr__(self):
+        """Make printing the object useful"""
+
+        repr_string = ("<Yummlyrecipe yummly_recipe_id: {yummly_recipe_id}," +
+                       "searched_title: {searched_title}," +
+                       "prep_url: {prep_url}," +
+                       "image_url: {image_url}>")
+
+        return repr_string.format(yummly_recipe_id=self.yummly_recipe_id,
+                                  searched_title=self.searched_title,
+                                  prep_url=self.prep_url,
+                                  image_url=self.image_url)
+
+    @classmethod
+    def create_api_recipe(cls, yummly_recipe_id=yummly_recipe_id, searched_title=searched_title, prep_url=prep_url, image_url=image_url):
+        """Add a new recipe from api to the database."""
+
+        new_api_recipe = Yummlyrecipe(yummly_recipe_id=yummly_recipe_id,
+                                      searched_title=searched_title,
+                                      prep_url=prep_url,
+                                      image_url=image_url)
+                            
+        db.session.add(new_api_recipe)
+        db.session.commit()
+        return new_api_recipe
+
+class Yummlyuser(db.Model):
+
+    __tablename__ = "yummlyusers"
+
+    yummly_id = db.Column(db.Integer, nullable=False, autoincrement=True, primary_key=True)
+    yummly_recipe_id = db.Column(db.String, db.ForeignKey("yummlyrecipes.yummly_recipe_id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+
+    def __repr__(self):
+        """Make printing the object useful"""
+
+        repr_string = ("<yummlyusers yummly_id: {yummly_id}," +
+                       "yummly_recipe_id: {yummly_recipe_id}," +
+                       "user_id: {user_id}>")
+
+        return repr_string.format(yummly_id=self.yummly_id,
+                                  yummly_recipe_id=self.yummly_recipe_id,
+                                  user_id=self.user_id)
+
+    @classmethod
+    def create_yummly_user(cls, yummly_recipe_id=yummly_recipe_id, user_id=user_id):
+        """Add a yummly user to DB"""
+
+        yummly_user = Yummlyuser(yummly_recipe_id=yummly_recipe_id, user_id=user_id)
+
+        db.session.add(yummly_user)
+        db.session.commit()
+        return yummly_user
+
 
 
 ##############################################################################

@@ -4,29 +4,36 @@
 
 
 {% for key, value in required_info.iteritems() %}
-           <p> Title: {{ key }} </p>
-           <p><img src='{{value.url}}'></p>
-            <p>ingredients: </p>
-                {% for ingredient in value.ingredients%}
-                <li>{{ingredient}}</li>
-                {% endfor %}
-            <p>Yields: {{value.yields}}</p>
-            
-            <p>Prep Time: {{value.prep_time}}</p>
-            <p>Cook Time: {{value.cook_time}}</p>
-        
-            <p>Total Time: {{value.total_time}}</p>
+    <form action="/api-recipe/{{value.recipe_id}}" method="POST">
+    <p> Title: {{ key }} </p>
+   
+    <p><img src='{{value.url}}'></p>
+    <p>ingredients: </p>
+    {% for ingredient in value.ingredients%}
+        <li>{{ingredient}}</li>
+    {% endfor %}
+    <p>Yields: {{value.yields}}</p>
+    <p>Prep Time: {{value.prep_time}}</p>
+    <p>Cook Time: {{value.cook_time}}</p>
+    <p>Total Time: {{value.total_time}}</p>
 
 
+    <div>
+        <a href="{{value.source_url}}" target="_blank"><button type="button">View Preparation</button></a>
+    </div><br><br>
 
-<div>
-    <a href="{{value.source_url}}"><button type="button">View Preparation</button></a>
-</div>
-    
-<input type="submit" value="+ Save Recipe"></input>
-<input type="hidden" name="recipeid" value="{{value.recipe_id}}"/> 
-            
+    <input type="hidden" name="img_url" value="{{value.url}}"/>
+    <input type="hidden" name="source_url" value="{{value.source_url}}"/>
+    <input type="hidden" name="api_recipe_title" value="{{ key }}"/>
+    <input type="hidden" name="api_recipe_id" value="{{value.recipe_id}}"/> 
+    <input type="submit" value="+ Save Recipe"></input>
+
+    </form>
+
 {% endfor %}
+
+            
+
 
 
 

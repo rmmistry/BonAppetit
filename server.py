@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Recipe, Category, Ingredient
+from model import connect_to_db, db, User, Recipe, Category, Ingredient, Yummlyrecipe, Yummlyuser
 
 import datetime
 
@@ -109,13 +109,23 @@ def logout():
 def show_my_recipe():
     """Show interactive recipe list page for a perticular user"""
 
-    #query db to get users recipies
-    db_categories = Category.query.all()
-    db_recipes = Recipe.query.all()
-    db_ingredients = Ingredient.query.all()
+    user_id=session.get("user_id")
 
-    #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
-    return render_template("recipe_list.html", db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients)
+    if user_id:
+        print "\n\n\n%s\n\n\n"%user_id
+        user = User.query.get(int(user_id))
+        #query db to get users recipies
+        db_categories = Category.query.all()
+        db_recipes = Recipe.query.filter_by(user_id=user_id).all()
+        db_ingredients = Ingredient.query.all()
+        yummlyusers = Yummlyuser.query.filter_by(user_id=user_id).all()
+
+        print yummlyusers
+
+        #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
+        return render_template("recipe_list.html", user=user, db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients)
+    else:
+        return redirect("/signin")
 
 
 @app.route('/recipeform', methods=['GET'])
@@ -314,6 +324,32 @@ def get_recipe_info_by_id(recipe_id):
     print "required_info : ", required_info
 
     return render_template("searched_recipe_display.html", required_info=required_info)
+
+@app.route('/api-recipe/<string:recipe_id>', methods=['POST'])
+def process_api_recipe(recipe_id):
+    """add API recipe info into DB"""
+
+    yummly_recipe_id = request.form["api_recipe_id"]
+    searched_title = request.form["api_recipe_title"]
+    prep_url = request.form["source_url"]
+    image_url = request.form["img_url"]
+    user_id = session.get("user_id")
+
+    # check if this recipe is in Yummlyrecipe table
+    recipe_exist = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).first()
+    print recipe_exist
+    if recipe_exist is None:
+        Yummlyrecipe.create_api_recipe(yummly_recipe_id, searched_title, prep_url, image_url)
+        print "THIS IS WORKING"
+    user_recipe_exist = Yummlyuser.query.filter_by(yummly_recipe_id=yummly_recipe_id, user_id=user_id).first()
+    if user_recipe_exist is None:
+        Yummlyuser.create_yummly_user(yummly_recipe_id, user_id)
+
+    return redirect("/recipe-list")
+
+
+
+
 
 if __name__ == "__main__":
     # Set debug=True, since it has to be True at the point that we invoke the

@@ -47,6 +47,10 @@
         <!--endmodal-->
     </div>
     {% endfor %}
+
+    {% for recipe in user.yummly_recipes %}
+        {{recipe.searched_title}}
+    {% endfor %}
 </div> <br><br>
 
 <div>
