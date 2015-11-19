@@ -24,10 +24,10 @@
         <div>
             <p>Yields:
             {{recipe.yields}}</p>
-            <input value="{{recipe.yields}}" id="yields">
+            <input type="number" value="{{recipe.yields}}" id="yields">
         </div>
 
-        <div>
+        <div id="repaceInfoId">
             <p>Ingredients:</p>
             {% for ingredient in ingredients %}
                 
@@ -50,7 +50,21 @@
     </body>
 </form>
 
+<script type="javascript">
+
+    $("#yields").change(function(){
+
+        var yields = $(this).val();
+        //var encodeParam = encodeURIComponent({"yields=":yields});
+// {"yields":"4"}
+        $.post("/calculate-quantity",{"yields=":yields},function(res){
+            console.log('here');
+        });
+
+    });
 
 
+</script>
 
-</htnl>
+
+</html>

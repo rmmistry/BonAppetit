@@ -1,3 +1,4 @@
+<div id="searchRecId">
 {% extends 'base.html' %}
 
 {% block content %}
@@ -52,19 +53,59 @@
 
         <a href='/remove-apirecipes/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 
-        <a href='/display/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-expand" aria-hidden="true"></span></a>
+        <!-- <a href='/display/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-expand" aria-hidden="true"></span></a> -->
 
-
+        <span data-recipe="{{item.yummly_recipe_id}}" id="showDetailInfoId" class="glyphicon glyphicon-expand"></span>
+      
     </div>
     {% endfor %}
-</div> <br><br>
+</div>
+ <br><br>
 
 <div>
-    <p> All Recipes: Total Number {{ db_recipes | length }} </p>
+    <p> User Recipes: Total Number {{ db_recipes | length }} </p>
 </div>
 
+<div>
+    <p> Yummly Recipes: Total Number {{ yummly_info | length }} </p>
+</div>
+</div>
+<div id="resultDiv"></div>
 
 
+<script type="text/javascript">
+   
+    $( document ).ready(function() {
+
+        $('span').on('click', function(){
+            var recipeid = $(this).data('recipe');
+            if(recipeid != undefined && recipeid.length > 0){
+            console.log(recipeid);    
+            $.ajax({
+                method: 'GET',
+                url : '/display/'+recipeid,
+
+                success : function(data,status,xhr){
+                    console.log('success ');
+                    $('#searchRecId').css('display','none')
+                    $('#resultDiv').html(data);
+                    // window.open(data,'_self');
+                    // $( "#new-projects" ).load( "/resources/load.html #projects li" );
+                },
+                error : function(xhr,error){
+                    console.log('failure');
+                    alert('Failire',"something went wrong")
+                }
+            })
+        }else{
+            console.log('dont send ajax')
+        }
+            
+            
+        });
+    });
+
+</script>
 
 
 

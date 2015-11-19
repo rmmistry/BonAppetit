@@ -332,6 +332,7 @@ def get_recipe_info_by_id(recipe_id):
 
     recipe_exist_db = Yummlyuser.query.filter_by(yummly_recipe_id=recipe_id, user_id=session["user_id"]).first()
     print "SEARCH RESULT", recipe_exist_db
+    # obj = jsonify(required_info)
     return render_template("searched_recipe_display.html", required_info=required_info, recipe_exist_db=recipe_exist_db)
 
 @app.route('/api-recipe/<string:recipe_id>', methods=['POST'])
@@ -366,6 +367,10 @@ def delete_api_recipe(recipe_id):
     flash("Your recipe has been deleted successfully")  
     return redirect("/recipe-list")
 
+@app.route("/calculate-quantity/")
+def quantity(yields):
+
+    pass
 
 
 
