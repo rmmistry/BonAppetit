@@ -118,12 +118,18 @@ def show_my_recipe():
         db_categories = Category.query.all()
         db_recipes = Recipe.query.filter_by(user_id=user_id).all()
         db_ingredients = Ingredient.query.all()
-        yummlyusers = Yummlyuser.query.filter_by(user_id=user_id).all()
+        # yummlyusers = Yummlyuser.query.filter_by(user_id=user_id).all()
+        # yummlyrecipes = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).all()
+        
+        yummly_info = []
+        for recipe in user.yummly_recipes:
+            yummly_info.append(recipe)
 
-        print yummlyusers
+
+        print yummly_info
 
         #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
-        return render_template("recipe_list.html", user=user, db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients)
+        return render_template("recipe_list.html", user=user, db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients, yummly_info=yummly_info)
     else:
         return redirect("/signin")
 
@@ -226,7 +232,7 @@ def process_confirm_recipe_edit(recipeid):
 def delete_recipe(recipeid):
     """deletes recipe for a given recipeid from database"""
 
-    #Delete recipe when user clicks on a recipe
+    #Delete recipe when user clicks on a remove icon
     Recipe.delete_existing_recipe(recipeid)
 
     flash("Your recipe has been deleted successfully")  
@@ -247,6 +253,7 @@ def show_view_recipe_page(recipeid):
 
     #url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}
     #when user clicks on a share link - model window should pop up and that model window should get this above link.
+######################################################################################
 
 @app.route('/api', methods=['POST'])
 def recipe_api():
@@ -323,7 +330,9 @@ def get_recipe_info_by_id(recipe_id):
                                  }
     print "required_info : ", required_info
 
-    return render_template("searched_recipe_display.html", required_info=required_info)
+    recipe_exist_db = Yummlyuser.query.filter_by(yummly_recipe_id=recipe_id, user_id=session["user_id"]).first()
+    print "SEARCH RESULT", recipe_exist_db
+    return render_template("searched_recipe_display.html", required_info=required_info, recipe_exist_db=recipe_exist_db)
 
 @app.route('/api-recipe/<string:recipe_id>', methods=['POST'])
 def process_api_recipe(recipe_id):
@@ -345,6 +354,16 @@ def process_api_recipe(recipe_id):
     if user_recipe_exist is None:
         Yummlyuser.create_yummly_user(yummly_recipe_id, user_id)
 
+    return redirect("/recipe-list")
+
+@app.route("/remove-apirecipes/<string:recipe_id>", methods=['GET'])
+def delete_api_recipe(recipe_id):
+    """deletes API recipe for a given recipeid from database"""
+
+    #Delete recipe when user clicks on a remove icon
+    Yummlyrecipe.delete_existing_yummly_recipe(recipe_id)
+
+    flash("Your recipe has been deleted successfully")  
     return redirect("/recipe-list")
 
 

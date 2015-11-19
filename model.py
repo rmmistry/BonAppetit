@@ -271,6 +271,15 @@ class Yummlyrecipe(db.Model):
         db.session.commit()
         return new_api_recipe
 
+    @classmethod
+    def delete_existing_yummly_recipe(cls, yummly_recipe_id):
+        """allows user to delete existing yummly recipe"""
+
+        delete_yummly_recipe = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).delete()
+        db.session.commit
+        return delete_yummly_recipe
+
+
 class Yummlyuser(db.Model):
 
     __tablename__ = "yummlyusers"
