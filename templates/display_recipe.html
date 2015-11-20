@@ -4,67 +4,92 @@
     Displays a recipe page
 </title>
 
-<form action="/view-recipe/{{recipe_id}}">
-    <body>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+    </script>
+</head>
 
-        <h1>
-            Your delicious recipe
-        </h1>
+<body>
+    <h1>
+        Your delicious recipe
+    </h1>
 
-        <div>
-            <p>Title:
-            {{recipe.title}}</p>
-        </div>
+    <div>
+        <p>Title:
+        {{recipe.title}}</p>
+    </div>
 
-        <div>
-            <p>Category:
-            {{recipe.category.category_name}}</p>
-        </div>
+    <div>
+        <p>Category:
+        {{recipe.category.category_name}}</p>
+    </div>
 
-        <div>
-            <p>Yields:
-            {{recipe.yields}}</p>
-            <input type="number" value="{{recipe.yields}}" id="yields">
-        </div>
+    <div>
+        Yields:<span id="std-yields">
+        {{recipe.yields}}</span>
+        <input type="number" value="{{recipe.yields}}" id="yields">
+    </div>
 
-        <div id="repaceInfoId">
-            <p>Ingredients:</p>
-            {% for ingredient in ingredients %}
-                
-                <p>{{ ingredient.quantity}} {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p>
+    <div id="repaceInfoId">
+        <p>Ingredients:</p>
+        {% for ingredient in ingredients %}
             
-            {% endfor %}
-        </div>
+            <p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p>
+        
+        {% endfor %}
+    </div>
 
-        <div>
-            <p>Preparation:</p>
-            {{recipe.preparation}}
+    <div>
+        <p>Preparation:</p>
+        {{recipe.preparation}}
 
-        </div>
+    </div>
 
-        <div>
-            <p>Image:</p>
-            <img src="{{recipe.image}}">
-        </div>
+    <div>
+        <p>Image:</p>
+        <img src="{{recipe.image}}">
+    </div>
 
-    </body>
-</form>
+<script>
+    function calculateQuantity(evt){
+        console.log("in event handler");
+        var newYield = Number($("#yields").val());
 
-<script type="javascript">
+        var standardYield = Number($("#std-yields").text());
+        console.log("STANDARD YIELD :" + standardYield);
+        console.log("yields:", $("#yields"));
 
-    $("#yields").change(function(){
+        var multiplier = newYield/standardYield;
+        console.log("MULTIPLIER :" + multiplier);
 
-        var yields = $(this).val();
-        //var encodeParam = encodeURIComponent({"yields=":yields});
-// {"yields":"4"}
-        $.post("/calculate-quantity",{"yields=":yields},function(res){
-            console.log('here');
-        });
+        var newNumber= standardYield * multiplier;
+        
+        var listOfIngredient = $("p span");
+        console.log(listOfIngredient);
 
-    });
+        for (var i = 0; i < listOfIngredient.length; i++){
+            console.log("INSIDE LOOP");
 
 
+            var ingredient = listOfIngredient[i];
+            console.log("ingredient: ", ingredient);
+            
+            console.dir("ingredient.innerHTML: ", ingredient.innerHTML);
+
+            var quantity = ingredient.innerHTML;
+            console.log("quantity: ", quantity)
+
+
+            var newQuantity = Math.round(quantity * multiplier);
+            console.log("newQuantity: ", newQuantity)
+
+            ingredient.innerHTML = newQuantity;
+            console.log("REPLACED QTY : " + ingredient);
+        }
+    }
+
+    $("#yields").on("change", calculateQuantity);
 </script>
 
-
+</body>
 </html>

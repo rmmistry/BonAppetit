@@ -193,7 +193,7 @@ class Ingredient(db.Model):
 
     ingredient_id = db.Column(db.Integer, nullable=False, autoincrement=True,
                               primary_key=True)
-    ingredient_name = db.Column(db.String(255), nullable=False)
+    ingredient_name = db.Column(db.String(255), nullable=True)
     quantity = db.Column(db.Integer, nullable=True)
     measure = db.Column(db.String(255), nullable=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.recipe_id"))
@@ -218,6 +218,16 @@ class Ingredient(db.Model):
 
         existing_ingredients = Ingredient.query.filter_by(recipe_id=recipeid).all()
         return existing_ingredients
+
+    @classmethod
+    def delete_existing_ingredients(cls, recipeid):
+        """allows user to delete existing recipe"""
+
+        delete_ingredient = Ingredient.query.filter_by(recipe_id=recipeid).delete()
+
+        db.session.commit()
+
+        return delete_ingredient
 
 
 

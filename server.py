@@ -120,13 +120,12 @@ def show_my_recipe():
         db_ingredients = Ingredient.query.all()
         # yummlyusers = Yummlyuser.query.filter_by(user_id=user_id).all()
         # yummlyrecipes = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).all()
-        
+
         yummly_info = []
+        
         for recipe in user.yummly_recipes:
             yummly_info.append(recipe)
 
-
-        print yummly_info
 
         #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
         return render_template("recipe_list.html", user=user, db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients, yummly_info=yummly_info)
@@ -139,7 +138,7 @@ def show_recipe_form():
     """show recipe form"""
 
     db_categories = Category.query.all()
-    print db_categories
+    # print db_categories
 
     return render_template("recipe_form.html", db_categories=db_categories)
 
@@ -149,12 +148,12 @@ def process_recipe_form():
     """Process recipe form to add new recipe to the database."""
     
     #get recipe form variables
-    print "request.form: ", request.form
+    # print "request.form: ", request.form
 
     userid = session["user_id"]
     title = request.form["title"]
     preparation = request.form["preparation"]
-    print preparation
+    # print preparation
     yields = request.form["yields"]
     category_id = request.form["category_name"]
     image = request.form["image"]
@@ -164,7 +163,7 @@ def process_recipe_form():
     ingredient_measures = request.form.getlist('measure')
 
     print "INGREDIENT NAME: ", ingredient_names
-   
+
     #recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
     Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
 
@@ -189,9 +188,11 @@ def show_prefilled_recipe_form(recipeid):
     db_categories = Category.query.all()
     ingredients = Ingredient.get_existing_ingredients(recipeid)
 
-    print "RECIPE OBJECT:", recipe
-    print recipe.preparation
-    print recipe.image
+    # print "INGREDIENT : ", ingredients
+
+    # print "RECIPE OBJECT:", recipe
+    # print recipe.preparation
+    # print recipe.image
 
     return render_template("/edit_recipe_form.html", recipe=recipe, db_categories=db_categories, ingredients=ingredients)
 
@@ -210,7 +211,7 @@ def process_confirm_recipe_edit(recipeid):
     recipe.category_id = request.form["category_name"]
     recipe.image = request.form["image"]
 
-    recipe.ingredients = []
+    Ingredient.delete_existing_ingredients(recipeid)
 
     ingredient_names = request.form.getlist('name')
     ingredient_quantities = request.form.getlist('quantity')
@@ -223,6 +224,7 @@ def process_confirm_recipe_edit(recipeid):
         measure = ingredient_measures[i]
         Ingredient.create_ingredient(item=item, quantity=quantity, measure=measure, recipe_id=recipeid)
 
+    db.session.commit()
 
     return redirect("/recipe-list")
 
@@ -235,7 +237,7 @@ def delete_recipe(recipeid):
     #Delete recipe when user clicks on a remove icon
     Recipe.delete_existing_recipe(recipeid)
 
-    flash("Your recipe has been deleted successfully")  
+    flash("Your recipe has been deleted successfully") 
     return redirect("/recipe-list")
 
 
@@ -364,14 +366,8 @@ def delete_api_recipe(recipe_id):
     #Delete recipe when user clicks on a remove icon
     Yummlyrecipe.delete_existing_yummly_recipe(recipe_id)
 
-    flash("Your recipe has been deleted successfully")  
+    flash("Your recipe has been deleted successfully")
     return redirect("/recipe-list")
-
-@app.route("/calculate-quantity/")
-def quantity(yields):
-
-    pass
-
 
 
 
