@@ -1,77 +1,87 @@
-<div id="searchRecId">
-{% extends 'base.html' %}
-
-{% block content %}
-
-{% if "user_id" in session %}
-<p> Shows Title, Category, Date Added </p>
+<div id="searchRecId"> 
+    {% extends 'base.html' %}
 
 
-<div>
-    
-    <p>Recipe:</p>
-    {% for recipe in db_recipes %}
+    {% block content %}
+
+    {% if "user_id" in session %}
+    <p> Shows Title, Category, Date Added </p>
+
+
     <div>
-        {{recipe.title}}
-        {{recipe.created_at}}
-        {{recipe.category.category_name}}
-        <a href='/recipes/{{recipe.recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+        <p>Recipe:</p>
+        {% for recipe in db_recipes %}
+        <div>
+            {{recipe.title}},
+            {{recipe.created_at}},
+            {{recipe.category.category_name}}
+            <a href='/recipes/{{recipe.recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 
-        <a href="#" data-toggle="modal" data-target="#myModal{{recipe.recipe_id}}">
-            <span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
+            <a href="#" data-toggle="modal" data-target="#myModal{{recipe.recipe_id}}">
+                <span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
 
-        <a href='/recipes/{{recipe.recipe_id}}/edit'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+            <a href='/recipes/{{recipe.recipe_id}}/edit'><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 
-        <!--modal-->
-        <div class="modal fade" id="myModal{{recipe.recipe_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Share via copy and paste</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" class="text-muted" value="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}" readonly="readonly">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <!--modal-->
+            <div class="modal fade" id="myModal{{recipe.recipe_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Share via copy and paste</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="text-muted" value="{{url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}" readonly="readonly">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--endmodal-->
         </div>
-        <!--endmodal-->
-    </div>
-    {% endfor %}
-    <br><br>
+        {% endfor %}<br><br>
 
-    <p>Search Results:</p>
+        <p>Search Results:</p>
 
-    {% for item in yummly_info %}
+        {% for item in yummly_info %}
+        <div>
+            {{item.searched_title}}
+
+            <a href='/remove-apirecipes/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+
+            <span data-recipe="{{item.yummly_recipe_id}}" id="showDetailInfoId" class="glyphicon glyphicon-expand"></span>
+        </div>
+        {% endfor %}
+    </div><br><br>
+     
     <div>
-        {{item.searched_title}}
-
-        <a href='/remove-apirecipes/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-
-        <!-- <a href='/display/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-expand" aria-hidden="true"></span></a> -->
-
-        <span data-recipe="{{item.yummly_recipe_id}}" id="showDetailInfoId" class="glyphicon glyphicon-expand"></span>
-      
+        <p> User Recipes: Total Number {{ db_recipes | length }} </p>
     </div>
-    {% endfor %}
-</div>
- <br><br>
 
-<div>
-    <p> User Recipes: Total Number {{ db_recipes | length }} </p>
-</div>
-
-<div>
-    <p> Yummly Recipes: Total Number {{ yummly_info | length }} </p>
-</div>
-</div>
+    <div>
+        <p> Yummly Recipes: Total Number {{ yummly_info | length }} </p>
+    </div>
+</div>  
 <div id="resultDiv"></div>
 
+<!--modal-->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-body" id="modalBody">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- endmodal
+ -->
 
 <script type="text/javascript">
    
@@ -87,21 +97,21 @@
 
                 success : function(data,status,xhr){
                     console.log('success ');
-                    $('#searchRecId').css('display','none')
-                    $('#resultDiv').html(data);
-                    // window.open(data,'_self');
-                    // $( "#new-projects" ).load( "/resources/load.html #projects li" );
+                   
+
+                    $('#modalBody').html(data);
+                    
+                    $("#myModal").modal();
+                    // $('#searchbox').css('display','none');
                 },
                 error : function(xhr,error){
                     console.log('failure');
-                    alert('Failire',"something went wrong")
+                    alert('Failire',"something went wrong");
                 }
             })
-        }else{
-            console.log('dont send ajax')
+            } else {
+            console.log('dont send ajax');
         }
-            
-            
         });
     });
 

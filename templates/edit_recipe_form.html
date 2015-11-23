@@ -11,7 +11,6 @@ hello you are in session
         <input type="text" name="title" value="{{recipe.title}}"style="width:600px"><br><br>
 
     <h3> Categorize this recipe </h3>
-
         <select name="category_name">
             {% for category in db_categories %}
                 <option value="{{category.category_id}}">{{category.category_name}}</option>
@@ -19,49 +18,41 @@ hello you are in session
         </select>
 
     <h3> Yields: </h3>
-
         <input type="text" name="yields" value="{{ recipe.yields }}" placeholder="#">
 
     <h3> Ingredients: </h3>
-
         <div id = "ingredient-container">
-
             {% for ingredient in ingredients %}
                 {% if ingredient.ingredient_name != '' %}
                 <div class="ingredient-field">
-
                     Qty:<input type="text" name="quantity" value="{{ ingredient.quantity }}" placeholder="Enter quantity" style="width: 90px;">
+
                     Measure:<input type="text" name="measure" value="{{ ingredient.measure }}"placeholder="Enter unit" style="width: 200px">
+                    
                     Item:<input type="text" name="name" value="{{ ingredient.ingredient_name }}"placeholder="Ingredient name" style="width: 300px">
                 </div>
                 {% endif %}
             {% endfor %}
-
         </div>
 
-    <input type="hidden" id="countId" name="count"> 
+    <input type="hidden" id="countId" name="count"><br><br>
 
-    <br><br>
     <button type="button" id="add-new">+ Add another ingredient</button> 
 
     <h3> Preparation: </h3>
-    
         <textarea rows="5" cols="50" name="preparation">{{recipe.preparation}}</textarea><br>
 
     <h3> Image: </h3>
         <input type="text" name="image" value="{{recipe.image}}"placeholder="enter image URL"> <br><br>
         <img src="{{recipe.image}}">
 
-
-
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
     <input type="hidden" name="recipeid" value="{{recipe.recipe_id}}"/> 
-
 </form>
 
 <script src="https://code.jquery.com/jquery.js"></script>
+
 <script>
-    
     $("#add-new").on('click', function() {
         var new_ingredient = $(".ingredient-field").get(0);
         var new_field= $(new_ingredient).clone();
@@ -73,7 +64,6 @@ hello you are in session
         $('.measure', new_field).attr('name', 'measure');
         $('.item', new_field).attr('name', 'name');
     });
-
 </script>
 
 {% endif %}

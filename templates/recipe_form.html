@@ -7,7 +7,6 @@ hello you are in session
 <h1>Add New Recipe</h1>
 
 <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
-
     <h3> Title: </h3> 
         <input type="text" name="title" style="width:600px"><br><br>
 
@@ -35,27 +34,22 @@ hello you are in session
             </div>
         </div>
 
-    <input type="hidden" id="countId" name="count"> 
+    <input type="hidden" id="countId" name="count"><br><br>
 
-    <br><br>
     <button type="button" id="add-new">+ Add another ingredient</button> 
 
     <h3> Preparation: </h3>
         <textarea rows="5" cols="50" name="preparation" placeholder="Provide steps to prepare the dish"></textarea><br>
 
-    
-
     <h3> Image: </h3>
         <input type="text" name="image" placeholder="enter image URL">
 
-
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
-
 </form>
 
 <script src="https://code.jquery.com/jquery.js"></script>
+
 <script>
-    
     $("#add-new").on('click', function() {
         var new_ingredient = $(".ingredient-field").get(0);
         var new_field= $(new_ingredient).clone();
@@ -67,7 +61,6 @@ hello you are in session
         $('.measure', new_field).attr('name', 'measure');
         $('.item', new_field).attr('name', 'name');
     });
-
 </script>
 
 {% endif %}
