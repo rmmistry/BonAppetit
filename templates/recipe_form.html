@@ -4,6 +4,10 @@
 {% if "user_id" in session %}
 hello you are in session
 
+<div id="add-newrecipe">
+<div class="row">
+    <div class="col-xs-12 col-md-8 col-offset-md-6">
+
 <h1>Add New Recipe</h1>
 
 <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
@@ -46,6 +50,9 @@ hello you are in session
 
     <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
 </form>
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery.js"></script>
 

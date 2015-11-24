@@ -100,9 +100,13 @@ def process_sign_in_form():
 def logout():
     """Log out"""
 
-    del session["user_id"]
-    flash("You are successfully Logged Out.")
-    return redirect("/")
+    if session.get('user_id'):
+        del session["user_id"]
+        flash("You are successfully Logged Out.")
+        return redirect("/")
+    else:
+        flash("You need to log in to do that.")
+        return redirect("/")
 
 
 @app.route('/recipe-list', methods=['GET'])
@@ -146,14 +150,15 @@ def show_recipe_form():
 @app.route('/recipeform-confirm', methods=['POST'])
 def process_recipe_form():
     """Process recipe form to add new recipe to the database."""
+    print "NEVER HITS THIS"
     
-    #get recipe form variables
-    # print "request.form: ", request.form
+    # get recipe form variables
+    print "request.form: ", request.form
 
     userid = session["user_id"]
     title = request.form["title"]
     preparation = request.form["preparation"]
-    # print preparation
+    # # print preparation
     yields = request.form["yields"]
     category_id = request.form["category_name"]
     image = request.form["image"]
@@ -165,8 +170,8 @@ def process_recipe_form():
     print "INGREDIENT NAME: ", ingredient_names
 
     #recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
+    #print "RECIPE ID:", recipe_id
     Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
-
     recipe_id = Recipe.get_recipe_id(title, userid)
 
     for i in range(len(ingredient_names)):

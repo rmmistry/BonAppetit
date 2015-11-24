@@ -28,12 +28,9 @@ class User(db.Model):
     def get_user_via_email(cls, user_email):
         """check if an account with a given email address is already exists."""
 
-        try:
-            login_info = cls.query.filter_by(email=user_email).one()
-            return login_info
+        login_info = cls.query.filter_by(email=user_email).first()
+        return login_info
 
-        except Exception, error:
-            print error
 
     @classmethod
     def create_user(cls, username, user_password, user_email):
@@ -324,14 +321,14 @@ class Yummlyuser(db.Model):
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri="sqlite:///recipedb.db"):
     """Connect the database to the Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///recipedb.db'
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.app = app
     db.init_app(app)
+
 
 
 if __name__ == "__main__":
