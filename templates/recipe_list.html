@@ -10,7 +10,7 @@
         {% for recipe in db_recipes %}
         <div>
             {{recipe.title}},
-            {{recipe.created_at}},
+            {{recipe.created_at.strftime('%Y-%m-%d')}},
             {{recipe.category.category_name}}
             <a href='/recipes/{{recipe.recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 
