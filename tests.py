@@ -191,7 +191,19 @@ class RecipeTests(unittest.TestCase):
                                       'password': "smith"},
                                 follow_redirects=True)
 
-    # def confirm_recipe(self):
+    def test_add_user(self):
+        """Can we add a user?"""
+
+        u = User(username="joel", email="joel@joel.com", password="secret")
+        db.session.add(u)
+
+        u2 = User.query.filter_by(username="joel").one()
+        self.assertEqual(u.email, u2.email)
+
+        u3 = User.get_user_via_email("joel@joel.com")
+        self.assertEqual(u.username, u3.username)
+
+    # def confrm_recipe(self):
     #     """ post new recipe"""
     #     print dir(self.client)
 

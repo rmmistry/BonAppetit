@@ -1,8 +1,84 @@
 .container-fluid{
-    padding: 10px 50px 50px 50px;
+    padding: 5px 15px 5px 15px;
+    height: 20px;
 }
 
-#add-newrecipe{
+.add-newrecipe{
     border: 1px solid black;
     width: 800px;
+    margin: 0 auto;
+}
+
+.form-control.form-title{
+    width: 600px;
+}
+
+.form-container{
+    margin-left: 30px;
+}
+
+.form-control{
+    width: 200px;
+}
+
+#dropdown-category{
+    height: 34px;
+}
+.qty-input{
+   width: 100px;
+   height: 34px; 
+   border-radius: 4px;
+   padding: 5px;
+}
+
+.measure-input{
+    width: 200px;
+    height: 34px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.item-input{
+    width: 300px;
+    height: 34px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.prep-input{
+    width: 600px;
+}
+
+.image-input{
+    height: 34px;
+    width: 300px;
+    border-radius: 4px;
+}
+
+#add-new{
+    width: 200px;
+    border-radius: 4px;
+    height: 34px;
+}
+
+#formSubmitId{
+    width: 200px;
+    border-radius: 4px;
+    height: 34px;
+}
+
+.nav, .navbar, .navbar-default {
+   background-color: #ff9999 ;
+
+}
+
+a {
+color: #333300;
+
+}
+
+.button-default{
+    padding-left: 10px;
+    text-align: center;
+
 }

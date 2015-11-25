@@ -2,57 +2,56 @@
 {% block content %}
 
 {% if "user_id" in session %}
-hello you are in session
 
-<div id="add-newrecipe">
-<div class="row">
-    <div class="col-xs-12 col-md-8 col-offset-md-6">
+<div class="add-newrecipe">
+    <div class="form-container">
+        <h1>Add New Recipe</h1>
 
-<h1>Add New Recipe</h1>
+        <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
+            <h4> Image: </h4>
+            <input type="text" name="image" class="image-input" placeholder="Enter image URL">
 
-<form  id="recipeFormId" action="/recipeform-confirm" method="POST">
-    <h3> Title: </h3> 
-        <input type="text" name="title" style="width:600px"><br><br>
+            <h4> Title: </h4> 
+            <input type="text" id="inputHelpBlock" name="title" class="form-control form-title" placeholder="Enter title" aria-describedby="helpBlock">
 
-    <h3> Categorize this recipe </h3>
-        <select name="category_name">
+            <h4> Categorize this recipe </h4>
+            <select id="dropdown-category" name="category_name">
             {% for category in db_categories %}
                 <option value="{{category.category_id}}">{{category.category_name}}</option>
             {% endfor %}
-        </select>
+            </select>
 
-    <h3> Yields: </h3>
-        <input type="text" name="yields" placeholder="#">
+            <h4> Yields: </h4>
+            <input type="text" name="yields" class="form-control" placeholder="#" aria-describedby="helpBlock">
 
-    <h3> Ingredients: </h3>
-        <div id = "ingredient-container">
-            <div class="ingredient-field">
+            <h4> Ingredients: </h4>
+            <div id = "ingredient-container">
+                <div class="ingredient-field">
+                
                 Qty:
-                <input type="text" name="quantity" placeholder="Enter quantity" style="width: 90px;">
-
+                <input type="text" name="quantity" class="qty-input" placeholder="Enter quantity">
+                
                 Measure:
-                <input type="text" name="measure" placeholder="Enter unit" style="width: 200px">
-
+                <input type="text"  name="measure" class="measure-input" placeholder="Enter unit">
+                
                 Item:
-                <input type="text" name="name" placeholder="Ingredient name" style="width: 300px">
+                <input type="text" name="name" class="item-input" placeholder="Ingredient name">
+                
+                </div>
             </div>
-        </div>
 
-    <input type="hidden" id="countId" name="count"><br><br>
+            <input type="hidden" id="countId" name="count"><br><br>
 
-    <button type="button" id="add-new">+ Add another ingredient</button> 
+            <button type="button" id="add-new">+ Add another ingredient</button> 
 
-    <h3> Preparation: </h3>
-        <textarea rows="5" cols="50" name="preparation" placeholder="Provide steps to prepare the dish"></textarea><br>
+            <h4> Preparation: </h4>
+            <textarea rows="5" cols="50" name="preparation" class="prep-input" placeholder="Provide steps to prepare the dish"></textarea><br><br>
 
-    <h3> Image: </h3>
-        <input type="text" name="image" placeholder="enter image URL">
-
-    <input type="submit" id="formSubmitId" value="+ Save Recipe"></input>
-</form>
-        </div>
+            <input type="submit" id="formSubmitId" value="+ Save Recipe"></input><br><br>
+        </form>
     </div>
 </div>
+           
 
 <script src="https://code.jquery.com/jquery.js"></script>
 

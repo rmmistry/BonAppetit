@@ -2,7 +2,7 @@
 {% block content %}
 
 
-
+<div id="recipe-contents">
 {% for key, value in required_info.iteritems() %}
     <form action="/api-recipe/{{value.recipe_id}}" method="POST">
     <p> Title: {{ key }} </p>
@@ -34,7 +34,7 @@
 
 {% endfor %}
 
-            
+</div> 
 
 
 

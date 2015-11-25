@@ -1,12 +1,9 @@
-<div id="searchRecId"> 
-    {% extends 'base.html' %}
 
+{% extends 'base.html' %}
+{% block content %}
 
-    {% block content %}
-
-    {% if "user_id" in session %}
-    <p> Shows Title, Category, Date Added </p>
-
+{% if "user_id" in session %}
+    <p> Your recipes </p>
 
     <div>
         <p>Recipe:</p>
@@ -72,7 +69,7 @@
     <div class="modal-content">
 
       <div class="modal-body" id="modalBody">
-        <p>One fine body&hellip;</p>
+        <!-- <p>Content here</p> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -95,9 +92,12 @@
                 method: 'GET',
                 url : '/display/'+recipeid,
 
-                success : function(data,status,xhr){
+                success : function(data){
+                    // $('#recipe-contents').html(data);
+                    data = $(data);
+                    console.log(data.find('#recipe-contents'));
                     console.log('success ');
-                   
+                    // console.log(data);                   
 
                     $('#modalBody').html(data);
                     
@@ -116,31 +116,6 @@
     });
 
 </script>
-
-
-
-
-<!-- <div>
-    Date Created:
-    {% for recipe in db_recipes %}
-    <br>{{recipe.created_at}}</br>
-    {% endfor %}
-</div><br><br>
-
-<div>
-    Category:
-    {% for recipe in db_recipes %}
-    <br>{{recipe.category.category_name}}</br>
-    {% endfor %}
-</div> -->
-
-
-<!-- <div>
-    {% for ingredient in db_ingredients %}
-        <br>{{ingredient.ingredient_name}}</br>
-    {% endfor %}
-</div> -->
-
 
 {% endif %}
 {% endblock %}
