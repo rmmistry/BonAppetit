@@ -9,11 +9,11 @@
 
         <form  action="/edit-recipe/{{recipe.recipe_id}}/confirm" method="POST" id="edit-recipe-form">
             <h4> Image: </h4>
-                <input type="text" name="image" class="image-input" value="{{recipe.image}}"placeholder="enter image URL"> <br><br>
+                <input type="text" name="image" class="image-input" value="{{recipe.image}}"placeholder="enter image URL"> 
                 <img src="{{recipe.image}}">
 
             <h4> Title: </h4> 
-                <input type="text" class="form-control form-title" name="title" value="{{recipe.title}}"style="width:600px"><br><br>
+                <input type="text" class="form-control form-title" name="title" value="{{recipe.title}}"style="width:600px">
 
             <h4> Categorize this recipe </h4>
                 <select id="dropdown-category" name="category_name">

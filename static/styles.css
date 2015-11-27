@@ -82,3 +82,15 @@ color: #333300;
     text-align: center;
 
 }
+
+#carousel{
+    height: 500px;
+}
+
+.carousel-inner > .item > img {
+min-width: 100%;
+height: 500px;}
+
+.navbar-brand {
+height: 60px;
+}
