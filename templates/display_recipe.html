@@ -9,46 +9,59 @@
     </script>
 </head>
 
-<body>
-    <h1>
-        Your delicious recipe
-    </h1>
-
+<body class="share-recipe">
     <div>
-        <p>Title:
-        {{recipe.title}}</p>
-    </div>
-
-    <div>
-        <p>Category:
-        {{recipe.category.category_name}}</p>
-    </div>
-
-    <div>
-        Yields:<span id="std-yields">
-        {{recipe.yields}}</span>
-        <input type="number" value="{{recipe.yields}}" id="yields">
-    </div>
-
-    <div id="repaceInfoId">
-        <p>Ingredients:</p>
-        {% for ingredient in ingredients %}
-            
-            <p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p>
+        <div class="form-container">
         
-        {% endfor %}
+        <h2>
+            Enjoy this recipe
+        </h2>
+
+        <div>
+            Image:
+            <img src="{{recipe.image}}">
+        </div>
+        <br>
+
+        <div>
+            Title:
+            {{recipe.title}}
+        </div>
+        <br>
+
+
+        <div>
+            Category:
+            {{recipe.category.category_name}}
+        </div>
+        <br>
+
+        <div>
+            Yields:<span id="std-yields">
+            {{recipe.yields}}</span>
+            <input type="number" value="{{recipe.yields}}" id="yields">
+        </div>
+        <br>
+
+        <div id="repaceInfoId">
+            Ingredients:
+            {% for ingredient in ingredients %}
+                <ul>
+                <li><p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p></li></ul>
+            
+            {% endfor %}
+        </div>
+
+        <div>
+            Preparation:
+            {{recipe.preparation}}
+
+        </div>
+    </div>
+    
     </div>
 
-    <div>
-        <p>Preparation:</p>
-        {{recipe.preparation}}
-
-    </div>
-
-    <div>
-        <p>Image:</p>
-        <img src="{{recipe.image}}">
-    </div>
+    
 
 <script>
     function calculateQuantity(evt){

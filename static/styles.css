@@ -7,6 +7,7 @@
     border: 1px solid black;
     width: 800px;
     margin: 0 auto;
+    border-radius: 4px;
 }
 
 .form-control.form-title{
@@ -59,12 +60,16 @@
     width: 200px;
     border-radius: 4px;
     height: 34px;
+    background-color: #1a998d;
+
 }
 
 #formSubmitId{
     width: 200px;
     border-radius: 4px;
     height: 34px;
+    background-color: #1a998d;
+
 }
 
 .nav, .navbar, .navbar-default {
@@ -93,4 +98,28 @@ height: 500px;}
 
 .navbar-brand {
 height: 60px;
+}
+
+.view-recipe{
+    color: #4d2500;
+    font-family: Georgia, serif;
+}
+
+#addnew{
+    text-align: center;
+}
+
+.navbar-default .navbar-nav>li>a {
+color: #331900;
+}
+
+#message{
+    text-align: center;
+}
+
+.share-recipe{
+    border: 1px solid black;
+    width: 400px;
+    margin: 0 auto;
+    border-radius: 4px;
 }

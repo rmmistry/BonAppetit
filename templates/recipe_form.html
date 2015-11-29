@@ -5,26 +5,30 @@
 
 <div class="add-newrecipe">
     <div class="form-container">
-        <h1>Add New Recipe</h1>
+        <h3 id="addnew" class="view-recipe">Add New Recipe</h3>
 
         <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
-            <h4> Image: </h4>
+            <h4 class="view-recipe"> Image: </h4>
             <input type="text" name="image" class="image-input" placeholder="Enter image URL">
+            <br><br>
 
-            <h4> Title: </h4> 
+            <h4 class="view-recipe"> Title: </h4> 
             <input type="text" id="inputHelpBlock" name="title" class="form-control form-title" placeholder="Enter title" aria-describedby="helpBlock">
+            <br>
 
-            <h4> Categorize this recipe </h4>
+            <h4 class="view-recipe"> Categorize this recipe </h4>
             <select id="dropdown-category" name="category_name">
             {% for category in db_categories %}
                 <option value="{{category.category_id}}">{{category.category_name}}</option>
             {% endfor %}
             </select>
+            <br><br>
 
-            <h4> Yields: </h4>
+            <h4 class="view-recipe"> Yields: </h4>
             <input type="text" name="yields" class="form-control" placeholder="#" aria-describedby="helpBlock">
+            <br>
 
-            <h4> Ingredients: </h4>
+            <h4 class="view-recipe"> Ingredients: </h4>
             <div id = "ingredient-container">
                 <div class="ingredient-field">
                 
@@ -40,14 +44,15 @@
                 </div>
             </div>
 
-            <input type="hidden" id="countId" name="count"><br><br>
+            <input type="hidden" id="countId" name="count"><br>
 
-            <button type="button" id="add-new">+ Add another ingredient</button> 
+            <button type="button" id="add-new" class="view-recipe">+ Add another ingredient</button>
+            <br><br> 
 
-            <h4> Preparation: </h4>
+            <h4 class="view-recipe"> Preparation: </h4>
             <textarea rows="5" cols="50" name="preparation" class="prep-input" placeholder="Provide steps to prepare the dish"></textarea><br><br>
 
-            <input type="submit" id="formSubmitId" value="+ Save Recipe"></input><br><br>
+            <input type="submit" id="formSubmitId" class="view-recipe" value="+ Save Recipe"></input><br><br>
         </form>
     </div>
 </div>
