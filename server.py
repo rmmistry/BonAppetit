@@ -1,16 +1,10 @@
 """Recipe Storage."""
 
 from jinja2 import StrictUndefined
-
-from flask import Flask, render_template, request, flash, redirect, session, url_for, jsonify
+from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-
 from model import connect_to_db, db, User, Recipe, Category, Ingredient, Yummlyrecipe, Yummlyuser
-
-import datetime
-
 import requests
-import json
 import os
 
 app = Flask(__name__)
@@ -21,9 +15,10 @@ app.secret_key = "secret key"
 # Normally, if you use an undefined variable in jinja2, it fails silently.
 # This is horrible. Fix this so that, instead, it raises an error.
 app.jinja_env.undefined = StrictUndefined
+
 #setting API key
-APP_ID=os.environ.get("APP_ID")
-APP_SECRET_KEY=os.environ.get("APP_KEY")
+APP_ID = os.environ.get("APP_ID")
+APP_SECRET_KEY = os.environ.get("APP_KEY")
 
 
 @app.route('/')
@@ -83,13 +78,10 @@ def process_sign_in_form():
     print user_confirmed
 
     if user_confirmed:
-        print "user_confirmed"
         userid = user_confirmed.user_id
-        print userid
         session["user_id"] = userid
-        print session["user_id"]
+
         url = "/recipeform"
-        #url = "/myrecipe-list", session["user_id"]
         return redirect(url)
     else:
         flash("username and password combination are Incorrect.")
@@ -113,28 +105,32 @@ def logout():
 def show_my_recipe():
     """Show interactive recipe list page for a perticular user"""
 
-    user_id=session.get("user_id")
+    user_id = session.get("user_id")
 
     if user_id:
-        print "\n\n\n%s\n\n\n"%user_id
         user = User.query.get(int(user_id))
-        #query db to get users recipies
+
+        #query database to get users recipe information
         db_categories = Category.query.all()
         db_recipes = Recipe.query.filter_by(user_id=user_id).all()
         db_ingredients = Ingredient.query.all()
-        # yummlyusers = Yummlyuser.query.filter_by(user_id=user_id).all()
-        # yummlyrecipes = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).all()
 
         yummly_info = []
-        
+
         for recipe in user.yummly_recipes:
             yummly_info.append(recipe)
 
-
         #jinja iterates over list of recipes, categories and ingredients to get title, Category, Date added info to show on recipe list
-        return render_template("recipe_list.html", user=user, db_recipes=db_recipes, db_categories=db_categories, db_ingredients=db_ingredients, yummly_info=yummly_info)
+        return render_template("recipe_list.html", user=user,
+                               db_recipes=db_recipes,
+                               db_categories=db_categories,
+                               db_ingredients=db_ingredients,
+                               yummly_info=yummly_info)
     else:
         return redirect("/signin")
+
+#####################################################################################################
+# handles new recipe form
 
 
 @app.route('/recipeform', methods=['GET'])
@@ -142,7 +138,6 @@ def show_recipe_form():
     """show recipe form"""
 
     db_categories = Category.query.all()
-    # print db_categories
 
     return render_template("recipe_form.html", db_categories=db_categories)
 
@@ -150,39 +145,45 @@ def show_recipe_form():
 @app.route('/recipeform-confirm', methods=['POST'])
 def process_recipe_form():
     """Process recipe form to add new recipe to the database."""
-    print "NEVER HITS THIS"
-    
-    # get recipe form variables
+
     print "request.form: ", request.form
 
+    # get recipe form variables.
     userid = session["user_id"]
     title = request.form["title"]
     preparation = request.form["preparation"]
-    # # print preparation
     yields = request.form["yields"]
     category_id = request.form["category_name"]
     image = request.form["image"]
 
+    # get multiple ingredients information using getlist() method.
     ingredient_names = request.form.getlist('name')
     ingredient_quantities = request.form.getlist('quantity')
     ingredient_measures = request.form.getlist('measure')
 
-    print "INGREDIENT NAME: ", ingredient_names
-
-    #recipe_id = Recipe.create_recipe(title, category_id, userid, preparation, yields)
-    #print "RECIPE ID:", recipe_id
+    # add above recipe information to database using create_recipe() method from model Class Recipe.
     Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
+
+    # get recipe id using get_recipe_id() method from model Class Recipe.
     recipe_id = Recipe.get_recipe_id(title, userid)
 
+    # iterate over range of ingredient_names and get user entered value for item, quantity and measure.
     for i in range(len(ingredient_names)):
         item = ingredient_names[i]
         quantity = ingredient_quantities[i]
         measure = ingredient_measures[i]
-        Ingredient.create_ingredient(item=item, quantity=quantity, measure=measure, recipe_id=recipe_id)
+
+        #add ingredient information to database using create_ingredient() method from model Class Ingredient.
+        Ingredient.create_ingredient(item=item,
+                                     quantity=quantity,
+                                     measure=measure,
+                                     recipe_id=recipe_id)
 
     return redirect("/recipe-list")
 
-#########################################################################
+#############################################################################################
+# handles existing recipe form
+
 
 @app.route("/recipes/<int:recipeid>/edit", methods=['GET'])
 def show_prefilled_recipe_form(recipeid):
@@ -193,22 +194,20 @@ def show_prefilled_recipe_form(recipeid):
     db_categories = Category.query.all()
     ingredients = Ingredient.get_existing_ingredients(recipeid)
 
-    # print "INGREDIENT : ", ingredients
-
-    # print "RECIPE OBJECT:", recipe
-    # print recipe.preparation
-    # print recipe.image
-
-    return render_template("/edit_recipe_form.html", recipe=recipe, db_categories=db_categories, ingredients=ingredients)
+    return render_template("/edit_recipe_form.html",
+                           recipe=recipe,
+                           db_categories=db_categories,
+                           ingredients=ingredients)
 
 
 @app.route("/edit-recipe/<int:recipeid>/confirm", methods=['POST'])
 def process_confirm_recipe_edit(recipeid):
     """Allows user to edit existing recipe and Save"""
 
-    #get recipe object using recipeid
+    # get recipe object using recipeid
     recipe = Recipe.get_existing_recipe(recipeid)
-    #ger recipe object = request.form(name)
+
+    # get form variables and replace their value in the database for a given recipe
     recipe.recipe_id = recipeid
     recipe.title = request.form["title"]
     recipe.preparation = request.form["preparation"]
@@ -218,11 +217,12 @@ def process_confirm_recipe_edit(recipeid):
 
     Ingredient.delete_existing_ingredients(recipeid)
 
+    # get multiple ingredients information using getlist() method.
     ingredient_names = request.form.getlist('name')
     ingredient_quantities = request.form.getlist('quantity')
     ingredient_measures = request.form.getlist('measure')
 
-
+    # iterate over range of ingredient_names and get user entered value for item, quantity and measure.
     for i in range(len(ingredient_names)):
         item = ingredient_names[i]
         quantity = ingredient_quantities[i]
@@ -234,15 +234,17 @@ def process_confirm_recipe_edit(recipeid):
     return redirect("/recipe-list")
 
 ###################################################################################
+# handles view and delete given recipe
 
 @app.route("/recipes/<int:recipeid>", methods=['GET'])
 def delete_recipe(recipeid):
     """deletes recipe for a given recipeid from database"""
 
-    #Delete recipe when user clicks on a remove icon
+    # Delete recipe when user clicks on a remove icon using model Class method
     Recipe.delete_existing_recipe(recipeid)
 
-    flash("Your recipe has been deleted successfully") 
+    flash("Your recipe has been deleted successfully")
+
     return redirect("/recipe-list")
 
 
@@ -253,52 +255,38 @@ def show_view_recipe_page(recipeid):
     recipe = Recipe.get_existing_recipe(recipeid)
     ingredients = Ingredient.get_existing_ingredients(recipeid)
 
+    return render_template("/display_recipe.html",
+                           recipe_id=recipeid,
+                           recipe=recipe,
+                           ingredients=ingredients)
 
-
-    #return str(recipeid)
-    return render_template("/display_recipe.html", recipe_id=recipeid, recipe=recipe, ingredients=ingredients)
-
-    #url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}}
-    #when user clicks on a share link - model window should pop up and that model window should get this above link.
+    # create dynamic URLs using url_for()
+    # url_for('show_view_recipe_page', recipeid=recipe.recipe_id, _external=True)}} used in recipe_list template's model window
+    # when user clicks on a share link - model window should pop up and that model window should get this above link.
 ######################################################################################
+# handles recipe from API
 
 @app.route('/api', methods=['POST'])
 def recipe_api():
-
-    print "got here"
+    """ get recipe id relevant to search query"""
     query = request.form["searchbox"]
-    print "query: ", query
- 
-    #r = requests.get("https://api.edamam.com/search?q=" + query + "&app_id=" + APP_ID + "&app_key=" + APP_SECRET_KEY)
-    # print "http://api.yummly.com/v1/api/recipes?_app_id="+ APP_ID +"&_app_key="+ APP_SECRET_KEY +"&"+ query
 
-    r = requests.get("http://api.yummly.com/v1/api/recipes?_app_id="+ APP_ID +"&_app_key="+ APP_SECRET_KEY + "&q=" + query)
-    results = r.json() #is this json and if it is then it turns type to dictionary
+    r = requests.get("http://api.yummly.com/v1/api/recipes?_app_id=" + APP_ID + "&_app_key=" + APP_SECRET_KEY + "&q=" + query)
 
-    # key =results.keys() # list
-    # print key
+    # convert json response into dictionary
+    results = r.json()
+    values = results['matches']
+    recipe_display = {}
 
-    values = results['matches']# dictionary
-    # print "values: ", values# list
-
-    # recipe_search_id=[]
-    # recipe_search_title=[]
-
-    recipe_display={}
-
+    # 1. get string of recipe title + id, 2. split, slice and join to get complete recipe title without id info,
+    # add complete title as a key and its recipe_id as value into empty dictionary,
+    # pass this dictionary to recipe_search_result template
     for i in range(len(values)):
         recipe_id = values[i]['id']
         splitted_list = recipe_id.split("-")
-        print splitted_list
         title = splitted_list[0:-1]
-        print title
         full_title = " ".join(title)
-        print full_title
-        recipe_display[full_title]=recipe_id
-        # recipe_search_title.append(full_title)
-        # recipe_search_id.append(recipe_id)
-        print "recipe id: ", recipe_id
-
+        recipe_display[full_title] = recipe_id
 
     return render_template("recipe_search_results.html", recipe_display=recipe_display)
 
@@ -311,20 +299,18 @@ def get_recipe_info_by_id(recipe_id):
     results = r.json()
 
     required_info = {}
-    print required_info
 
     for i in results:
         title1 = results['name']
         ingredients = results['ingredientLines']
         yields = results['yield']
-        # prep_time = results['prepTime']
         prep_time = results.get('prepTime', 'not defined')
         cook_time = results.get('cookTime', 'not defined')
         rating = results.get('rating', 'not defined')
         total_time = results['totalTime']
         url = results['images'][0]['hostedMediumUrl']
         source_url = results['source']['sourceRecipeUrl']
-        
+
         required_info[title1] = {'ingredients': ingredients,
                                  'yields': yields,
                                  'prep_time': prep_time,
@@ -335,12 +321,11 @@ def get_recipe_info_by_id(recipe_id):
                                  'source_url': source_url,
                                  'recipe_id': recipe_id
                                  }
-    print "required_info : ", required_info
 
     recipe_exist_db = Yummlyuser.query.filter_by(yummly_recipe_id=recipe_id, user_id=session["user_id"]).first()
-    print "SEARCH RESULT", recipe_exist_db
-    # obj = jsonify(required_info)
+
     return render_template("searched_recipe_display.html", required_info=required_info, recipe_exist_db=recipe_exist_db)
+
 
 @app.route('/api-recipe/<string:recipe_id>', methods=['POST'])
 def process_api_recipe(recipe_id):
@@ -354,15 +339,16 @@ def process_api_recipe(recipe_id):
 
     # check if this recipe is in Yummlyrecipe table
     recipe_exist = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).first()
-    print recipe_exist
     if recipe_exist is None:
         Yummlyrecipe.create_api_recipe(yummly_recipe_id, searched_title, prep_url, image_url)
-        print "THIS IS WORKING"
+
+    # check to see if recipe exist in to user database
     user_recipe_exist = Yummlyuser.query.filter_by(yummly_recipe_id=yummly_recipe_id, user_id=user_id).first()
     if user_recipe_exist is None:
         Yummlyuser.create_yummly_user(yummly_recipe_id, user_id)
 
     return redirect("/recipe-list")
+
 
 @app.route("/remove-apirecipes/<string:recipe_id>", methods=['GET'])
 def delete_api_recipe(recipe_id):
@@ -375,9 +361,8 @@ def delete_api_recipe(recipe_id):
     return redirect("/recipe-list")
 
 
-
 if __name__ == "__main__":
-    # Set debug=True, since it has to be True at the point that we invoke the
+    # Set debug=True, since it has to be True at the point that I invoke the
     # DebugToolbarExtension
     app.debug = True
 

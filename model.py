@@ -3,9 +3,9 @@
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 
-# This is the connection to the SQLite database; we're getting this through
-# the Flask-SQLAlchemy helper library. On this, we can find the `session`
-# object, where we do most of our interactions (like committing, etc.)
+# This is the connection to the SQLite database; I am getting this through
+# the Flask-SQLAlchemy helper library. On this, I can find the `session`
+# object, where I do most of my interactions (like committing, etc.)
 
 db = SQLAlchemy()
 
@@ -30,7 +30,6 @@ class User(db.Model):
 
         login_info = cls.query.filter_by(email=user_email).first()
         return login_info
-
 
     @classmethod
     def create_user(cls, username, user_password, user_email):
@@ -103,7 +102,7 @@ class Recipe(db.Model):
     @classmethod
     def get_recipe_id(cls, title, user_id):
         """finds recipeid for a given title and userid"""
-        
+
         recipe = Recipe.query.filter_by(title=title, user_id=user_id).first()
         return recipe.recipe_id
 
@@ -112,7 +111,6 @@ class Recipe(db.Model):
         """get existing recipe for a given recipeid"""
 
         recipe = Recipe.query.get(recipeid)
-
         return recipe
 
     @classmethod
@@ -122,7 +120,6 @@ class Recipe(db.Model):
         delete_recipe = Recipe.query.filter_by(recipe_id=recipeid).delete()
 
         db.session.commit()
-
         return delete_recipe
 
     def __repr__(self):
@@ -168,20 +165,14 @@ class Category(db.Model):
 
         return category.category_id
 
-    @classmethod
-    def get_db_categories():
-        """get all the categories from db"""
-        
-        pass
+        def __repr__(self):
+            """Make printing the object useful"""
 
-    def __repr__(self):
-        """Make printing the object useful"""
+            repr_string = ("<Category category_id: {category_id}," +
+                           "category_name: {category_name},")
 
-        repr_string = ("<Category category_id: {category_id}," +
-                       "category_name: {category_name},")
-
-        return repr_string.format(category_id=self.category_id,
-                                  category_name=self.category_name)
+            return repr_string.format(category_id=self.category_id,
+                                      category_name=self.category_name)
 
 
 class Ingredient(db.Model):
@@ -223,10 +214,7 @@ class Ingredient(db.Model):
         delete_ingredient = Ingredient.query.filter_by(recipe_id=recipeid).delete()
 
         db.session.commit()
-
         return delete_ingredient
-
-
 
     def __repr__(self):
         """Make printing the object useful"""
@@ -273,7 +261,7 @@ class Yummlyrecipe(db.Model):
                                       searched_title=searched_title,
                                       prep_url=prep_url,
                                       image_url=image_url)
-                            
+
         db.session.add(new_api_recipe)
         db.session.commit()
         return new_api_recipe
@@ -316,10 +304,9 @@ class Yummlyuser(db.Model):
         db.session.commit()
         return yummly_user
 
-
-
 ##############################################################################
 # Helper functions
+
 
 def connect_to_db(app, db_uri="sqlite:///recipedb.db"):
     """Connect the database to the Flask app."""
@@ -328,8 +315,6 @@ def connect_to_db(app, db_uri="sqlite:///recipedb.db"):
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.app = app
     db.init_app(app)
-
-
 
 if __name__ == "__main__":
     # As a convenience, if i run this module interactively, it will leave
