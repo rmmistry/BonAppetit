@@ -271,7 +271,7 @@ class Yummlyrecipe(db.Model):
         """allows user to delete existing yummly recipe"""
 
         delete_yummly_recipe = Yummlyrecipe.query.filter_by(yummly_recipe_id=yummly_recipe_id).delete()
-        db.session.commit
+        db.session.commit()
         return delete_yummly_recipe
 
 

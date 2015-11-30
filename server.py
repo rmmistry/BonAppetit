@@ -1,4 +1,6 @@
-"""Recipe Storage."""
+""" This supports various routes to store new recipe, edit existing recipe,
+view existing recipe, share via weblink with others,
+search and save recipe from yummly API """
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
@@ -369,6 +371,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     #Use the DebugToolbar
-    DebugToolbarExtension(app)
+    #DebugToolbarExtension(app)
 
     app.run()

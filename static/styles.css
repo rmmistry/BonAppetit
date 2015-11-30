@@ -14,6 +14,16 @@
     width: 600px;
 }
 
+.form-field{
+    font-weight: bold;
+}
+.display-form-container{
+    border: 1px black solid;
+    padding-left: 90px;
+    height: 600px;
+    font-family: Georgia, serif;
+    overflow-y: auto;
+}
 .form-container{
     margin-left: 30px;
 }

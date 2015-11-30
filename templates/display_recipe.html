@@ -5,46 +5,51 @@
 </title>
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+    <link rel="stylesheet" href="/static/styles.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+
     </script>
 </head>
 
-<body class="share-recipe">
-    <div>
-        <div class="form-container">
+<body >
+
+    <div style="padding: 0px 300px" height="600">
+        <div class="display-form-container">
         
         <h2>
             Enjoy this recipe
         </h2>
 
         <div>
-            Image:
-            <img src="{{recipe.image}}">
+            <span class="form-field">Image:</span>
+            <span><img height="50%" width="50%" src="{{recipe.image}}"></span>
+        </div>
+
+        <br>
+
+        <div>
+            <span class="form-field">Title:</span>
+            <span >{{recipe.title}}</span>
+        </div>
+        <br>
+
+
+        <div>
+            <span class="form-field">Category:</span>
+            <span>{{recipe.category.category_name}}</span>
         </div>
         <br>
 
         <div>
-            Title:
-            {{recipe.title}}
-        </div>
-        <br>
-
-
-        <div>
-            Category:
-            {{recipe.category.category_name}}
-        </div>
-        <br>
-
-        <div>
-            Yields:<span id="std-yields">
+            <span class="form-field">Yields:<span><span id="std-yields">
             {{recipe.yields}}</span>
             <input type="number" value="{{recipe.yields}}" id="yields">
         </div>
         <br>
 
         <div id="repaceInfoId">
-            Ingredients:
+            <spam class="form-field">Ingredients:</span>
             {% for ingredient in ingredients %}
                 <ul>
                 <li><p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p></li></ul>
@@ -53,11 +58,11 @@
         </div>
 
         <div>
-            Preparation:
-            {{recipe.preparation}}
+            <span class="form-field">Preparation:</span>
+            <span>{{recipe.preparation}}</span>
 
         </div>
-    </div>
+        </div>
     
     </div>
 
@@ -100,7 +105,6 @@
             console.log("REPLACED QTY : " + ingredient);
         }
     }
-
     $("#yields").on("change", calculateQuantity);
 </script>
 

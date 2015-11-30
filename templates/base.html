@@ -138,7 +138,7 @@
 <br>
 
 {% for flash in get_flashed_messages() %}
-  {{ flash }}
+  <span class="alert alert-default">{{ flash }}</span>
 {% endfor %}
 
 {% block content %}

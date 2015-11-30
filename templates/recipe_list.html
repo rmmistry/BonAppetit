@@ -78,13 +78,15 @@
             <tbody>
                 {% for item in yummly_info %}
                 <tr>
-                <td>
-                    {{item.searched_title}}</td>
+                    <td>
+                        {{item.searched_title}}
+                    </td>
 
-                 <td> <a href='/remove-apirecipes/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                     <td> <a href='/remove-apirecipes/{{item.yummly_recipe_id}}'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                     </td>
 
-                 <td>   <span data-recipe="{{item.yummly_recipe_id}}" id="showDetailInfoId" class="glyphicon glyphicon-expand"></span>
-                </td>
+                     <td><span data-recipe="{{item.yummly_recipe_id}}" id="showDetailInfoId" class="glyphicon glyphicon-expand"></span>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -118,7 +120,7 @@
 
 <script type="text/javascript">
    
-    $( document ).ready(function() {
+    $( document ).ready(function(){
 
         $('span').on('click', function(){
             var recipeid = $(this).data('recipe');
@@ -129,25 +131,20 @@
                 url : '/display/'+recipeid,
 
                 success : function(data){
-                    // $('#recipe-contents').html(data);
                     data = $(data);
                     console.log(data.find('#recipe-contents'));
-                    console.log('success ');
-                    // console.log(data);                   
+                    console.log('success ');                   
 
                     $('#modalBody').html(data);
                     
-                    $("#myModal").modal();
-                    // $('#searchbox').css('display','none');
-                },
+                    $("#myModal").modal();},
                 error : function(xhr,error){
                     console.log('failure');
-                    alert('Failire',"something went wrong");
-                }
-            })
-            } else {
-            console.log('dont send ajax');
-        }
+                    alert('Failire',"something went wrong");}
+                    })
+            } 
+            else {
+            console.log('dont send ajax');}
         });
     });
 
