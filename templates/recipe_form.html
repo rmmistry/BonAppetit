@@ -9,11 +9,11 @@
 
         <form  id="recipeFormId" action="/recipeform-confirm" method="POST">
             <h4 class="view-recipe"> Image: </h4>
-            <input type="text" name="image" class="image-input" placeholder="Enter image URL">
+            <input type="text" name="image" class="image-input" placeholder="Enter image URL" value="http://www.recipe.com/images/thai-peanut-noodles-11900012rca-ss.jpg">
             <br><br>
 
             <h4 class="view-recipe"> Title: </h4> 
-            <input type="text" id="inputHelpBlock" name="title" class="form-control form-title" placeholder="Enter title" aria-describedby="helpBlock">
+            <input type="text" id="inputHelpBlock" name="title" class="form-control form-title" placeholder="Enter title" aria-describedby="helpBlock" value="Thai Peanut Noodles">
             <br>
 
             <h4 class="view-recipe"> Categorize this recipe </h4>
@@ -25,7 +25,7 @@
             <br><br>
 
             <h4 class="view-recipe"> Yields: </h4>
-            <input type="text" name="yields" class="form-control" placeholder="#" aria-describedby="helpBlock">
+            <input type="text" name="yields" class="form-control" placeholder="#" aria-describedby="helpBlock" value="10">
             <br>
 
             <h4 class="view-recipe"> Ingredients: </h4>
@@ -33,13 +33,13 @@
                 <div class="ingredient-field">
                 
                 Qty:
-                <input type="text" name="quantity" class="qty-input" placeholder="Enter quantity">
+                <input type="text" name="quantity" class="qty-input" placeholder="Enter quantity" value="">
                 
                 Measure:
-                <input type="text"  name="measure" class="measure-input" placeholder="Enter unit">
+                <input type="text"  name="measure" class="measure-input" placeholder="Enter unit" value="">
                 
                 Item:
-                <input type="text" name="name" class="item-input" placeholder="Ingredient name">
+                <input type="text" name="name" class="item-input" placeholder="Ingredient name" value="">
                 
                 </div>
             </div>
@@ -50,7 +50,7 @@
             <br><br> 
 
             <h4 class="view-recipe"> Preparation: </h4>
-            <textarea rows="5" cols="50" name="preparation" class="prep-input" placeholder="Provide steps to prepare the dish"></textarea><br><br>
+            <textarea rows="5" cols="50" name="preparation" class="prep-input" placeholder="Provide steps to prepare the dish">Cook pasta in a large pot of boiling water until done.&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Drain. &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Meanwhile, combine oil and onions in a small skillet. Saute over low heat until tender.&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Add ginger; cook and stir for 1 to 2 minutes. Mix in peanut butter, soy sauce, water, vinegar, sugar, and red pepper flakes. Remove from heat.Toss noodles with sauce, and serve.</textarea><br><br>
 
             <input type="submit" id="formSubmitId" class="view-recipe" value="+ Save Recipe"></input><br><br>
         </form>
