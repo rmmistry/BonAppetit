@@ -133,3 +133,10 @@ color: #331900;
     margin: 0 auto;
     border-radius: 4px;
 }
+
+#recipe-contents {
+margin-left: auto;
+width: 400PX;
+margin-right: auto;
+text-align: center;
+}
