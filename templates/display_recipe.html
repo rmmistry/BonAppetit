@@ -50,11 +50,13 @@
 
         <div id="repaceInfoId">
             <spam class="form-field">Ingredients:</span>
+            <ul>
             {% for ingredient in ingredients %}
-                <ul>
-                <li><p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p></li></ul>
+                
+                <li><p class="calculateQuantity" ><span>{{ ingredient.quantity}}</span> {{ ingredient.measure }} {{ ingredient.ingredient_name}}</p></li>
             
             {% endfor %}
+        </ul>
         </div>
 
         <div>

@@ -164,10 +164,13 @@ def process_recipe_form():
     ingredient_measures = request.form.getlist('measure')
 
     # add above recipe information to database using create_recipe() method from model Class Recipe.
-    Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
+    new_recipe = Recipe.create_recipe(title, category_id, userid, preparation, yields, image)
 
     # get recipe id using get_recipe_id() method from model Class Recipe.
-    recipe_id = Recipe.get_recipe_id(title, userid)
+    # recipe_id = Recipe.get_recipe_id(title, userid) # this is a bug, don't use this line.
+
+    recipe_id = new_recipe.recipe_id
+
 
     # iterate over range of ingredient_names and get user entered value for item, quantity and measure.
     for i in range(len(ingredient_names)):
@@ -238,12 +241,15 @@ def process_confirm_recipe_edit(recipeid):
 ###################################################################################
 # handles view and delete given recipe
 
+
 @app.route("/recipes/<int:recipeid>", methods=['GET'])
 def delete_recipe(recipeid):
     """deletes recipe for a given recipeid from database"""
 
     # Delete recipe when user clicks on a remove icon using model Class method
     Recipe.delete_existing_recipe(recipeid)
+
+    Ingredient.delete_existing_ingredients(recipeid)
 
     flash("Your recipe has been deleted successfully")
 
@@ -267,6 +273,7 @@ def show_view_recipe_page(recipeid):
     # when user clicks on a share link - model window should pop up and that model window should get this above link.
 ######################################################################################
 # handles recipe from API
+
 
 @app.route('/api', methods=['POST'])
 def recipe_api():
