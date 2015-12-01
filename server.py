@@ -51,7 +51,7 @@ def process_sign_up_form():
 
     if not user_confirmed:
         User.create_user(username, user_password, user_email)
-        flash("Your account has been created successfully")
+        flash("Your account has been created successfully, please sign in")
     else:
         flash("you already have an account, please sign in.")
 
@@ -170,7 +170,6 @@ def process_recipe_form():
     # recipe_id = Recipe.get_recipe_id(title, userid) # this is a bug, don't use this line.
 
     recipe_id = new_recipe.recipe_id
-
 
     # iterate over range of ingredient_names and get user entered value for item, quantity and measure.
     for i in range(len(ingredient_names)):
